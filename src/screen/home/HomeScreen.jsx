@@ -49,11 +49,11 @@ function HomeScreen() {
       <ImageSlider />
       <MembershipCard />
 
-      <h2 className="text-xl font-bold text-gray-900 mt-6 mb-2 pl-1">Telusuri Kategori</h2>
+      <h2 className="text-xl font-bold text-gray-900 mt-6 ml-3 pl-1">Telusuri Kategori</h2>
       <CategorySelector />
 
-      <h2 className="text-xl font-bold text-gray-900 mt-6 mb-2 pl-1">Promo Patungan</h2>
-      <div className="flex overflow-x-auto space-x-4 pb-4 pl-1">
+      <h2 className="text-xl font-bold text-gray-900 mt-6 ml-3 mb-2 pl-1">Promo Patungan</h2>
+      <div className="flex overflow-x-auto space-x-4 pb-4 pl-1 ml-3">
         {patunganData.map((item, idx) => (
           <div
             key={idx}
@@ -64,8 +64,8 @@ function HomeScreen() {
           </div>
         ))}
       </div>
-      <h2 className="text-xl font-bold text-gray-900 mt-6 mb-2 pl-1">Promo Arisan</h2>
-      <div className="flex overflow-x-auto space-x-4 pb-4 pl-1">
+      <h2 className="text-xl font-bold text-gray-900 mt-6 ml-3 mb-2 pl-1">Promo Arisan</h2>
+      <div className="flex overflow-x-auto space-x-4 pb-4 pl-1 ml-3">
         {arisanData
           .map((item, idx) =>
             <div
@@ -77,7 +77,7 @@ function HomeScreen() {
             </div>
           )}
       </div>
-      <h2 className="text-sm text-center text-gray-900 mt-6 mb-2 pl-1">PT Patungan Properti Indonesia</h2>
+      <h2 className="text-sm text-center text-gray-900 mt-6 ml-3 mb-2 pl-1">PT Patungan Properti Indonesia</h2>
     </div>
   );
 }

@@ -83,7 +83,7 @@ const MembershipCard = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-999">
           <div className="bg-white rounded-lg p-6 w-80">
             <h2 className="text-lg font-bold text-center mb-4">Transfer Dana</h2>
             <input
