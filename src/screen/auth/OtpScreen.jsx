@@ -43,7 +43,7 @@ const OtpVerificationScreen = () => {
       const response = await postData('otp/validateWA', formData);
       localStorage.setItem('accessTokens', response.message.accessToken);
       setLoading(false);
-      navigate('/'); // atau halaman berikutnya
+      navigate('/HomeScreen'); // atau halaman berikutnya
     } catch (error) {
       alert(error?.response?.data?.message || "Terjadi kesalahan saat memverifikasi OTP.");
       setLoading(false);

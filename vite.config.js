@@ -8,9 +8,9 @@ export default defineConfig({
     registerType: 'autoUpdate',
     includeAssets: ['vite.svg', 'logo.png', 'logo.png'],
     manifest: {
-      name: 'Nama Aplikasi Kamu',
-      short_name: 'Aplikasi',
-      description: 'Deskripsi singkat aplikasi kamu',
+      name: 'BERES',
+      short_name: 'BERES',
+      description: 'BERES APLIKASI',
       theme_color: '#ffffff',
       background_color: '#ffffff',
       display: 'standalone',
