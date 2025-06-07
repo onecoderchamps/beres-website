@@ -49,14 +49,14 @@ const ArisanComponent = ({ data }) => {
 
         <div className="flex justify-between">
           <div className="flex-1 text-center">
-            <p className="text-gray-600 text-sm">Harga</p>
+            <p className="text-gray-600 text-sm">Bidang</p>
             <p className="text-black font-bold text-md mt-1">
-              Rp {data.targetPay.toLocaleString('id-ID')}
+              {data.keterangan}
             </p>
           </div>
 
           <div className="flex-1 text-center">
-            <p className="text-gray-600 text-sm">Asset</p>
+            <p className="text-gray-600 text-sm">Iuran</p>
             <p className="text-black font-bold text-md mt-1">
               Rp {data.totalPrice.toLocaleString('id-ID')}
             </p>

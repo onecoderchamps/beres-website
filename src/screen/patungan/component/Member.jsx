@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getData, postData } from '../../../api/service';
 import { Check, X } from 'lucide-react';
 
-const Member = ({ data, getArisanDatabase }) => {
+const Member = ({ data, getPatunganDatabase }) => {
   const bulanSekarang = new Date().toLocaleString('id-ID', { month: 'long' });
   const [userData, setUserData] = useState(null);
 
@@ -25,9 +25,9 @@ const Member = ({ data, getArisanDatabase }) => {
       idUser: items?.idUser,
     };
     try {
-      const response = await postData('Arisan/PayCompleteArisan', formData);
+      const response = await postData('Patungan/PayCompletePatungan', formData);
       alert(response.message);
-      getArisanDatabase();
+      getPatunganDatabase();
     } catch (error) {
       console.log(error);
       alert(error?.data?.errorMessage?.Error || "Terjadi kesalahan saat memverifikasi.");
@@ -47,7 +47,7 @@ const Member = ({ data, getArisanDatabase }) => {
           </tr>
         </thead>
         <tbody>
-          {data.memberArisan.map((item, index) => (
+          {data.memberPatungan.map((item, index) => (
             <tr key={index} className="border-t">
               <td className="p-2 text-center">{index + 1}</td>
               <td className="p-2">{item.name}</td>

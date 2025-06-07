@@ -129,19 +129,7 @@ export default function PatunganDetail({ }) {
                     }}
                     className="fixed bottom-5 right-5 bg-green-900 text-white px-6 py-3 rounded-full shadow-lg"
                 >
-                    Gabung Member
-                </button>
-            )}
-
-            {detailData?.statusMember?.isMembership && !detailData?.statusMember?.isPayMonth && (
-                <button
-                    onClick={() => {
-                        setModalPayment(true);
-                        getUserData();
-                    }}
-                    className="fixed bottom-5 right-5 bg-green-900 text-white px-6 py-3 rounded-full shadow-lg"
-                >
-                    Bayar Iuran
+                    Beli Asset
                 </button>
             )}
 
@@ -149,10 +137,12 @@ export default function PatunganDetail({ }) {
             {modalVisible && (
                 <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-999999 p-10">
                     <div className="bg-white p-6 rounded-lg w-full max-w-md">
-                        <h2 className="text-xl font-bold mb-4">Gabung Member</h2>
-                        <p><strong>Saldo:</strong> Rp {datas?.balance}</p>
-                        <p><strong>Iuran:</strong> Rp {detailData?.targetPay}</p>
-
+                        <h2 className="text-xl font-bold mb-4">Beli Asset</h2>
+                        <p><strong>Total Saldo:</strong> <br />Rp {datas?.balance}</p>
+                        <br />
+                        <p><strong>Harga / Lembar:</strong> <br />Rp {detailData?.targetPay}</p>
+                        <br />
+                        <p><strong>Jumlah Asset</strong></p>
                         <div className="mt-4 flex items-center space-x-2">
                             <button onClick={() => setJumlahLot((prev) => Math.max(1, prev - 1))}>-</button>
                             <input
@@ -163,8 +153,8 @@ export default function PatunganDetail({ }) {
                             />
                             <button onClick={() => setJumlahLot((prev) => prev + 1)}>+</button>
                         </div>
-
-                        <p className="mt-4"><strong>Total Iuran/Bulan:</strong> Rp {nominal}</p>
+                        <br />
+                        <p className="mt-4"><strong>Total Saham:</strong> Rp {nominal}</p>
 
                         <div className="flex justify-between mt-6">
                             <button onClick={handleJoin} className="bg-green-900 text-white px-4 py-2 rounded">

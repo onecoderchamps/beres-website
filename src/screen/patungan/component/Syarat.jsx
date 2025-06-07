@@ -8,7 +8,7 @@ const Syarat = ({ data }) => {
 
   const getDatabase = async () => {
     try {
-      const response = await getData('rekening/SettingArisan');
+      const response = await getData('rekening/SettingPatungan');
       setDatas(response.data);
     } catch (error) {
       alert(error?.response?.data?.message || 'Terjadi kesalahan saat memverifikasi.');

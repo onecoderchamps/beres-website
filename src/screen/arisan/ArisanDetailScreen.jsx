@@ -151,7 +151,7 @@ export default function ArisanDetail({ }) {
                     <div className="bg-white p-6 rounded-lg w-full max-w-md">
                         <h2 className="text-xl font-bold mb-4">Gabung Member</h2>
                         <p><strong>Saldo:</strong> Rp {datas?.balance}</p>
-                        <p><strong>Harga per Lot:</strong> Rp {detailData?.targetPay}</p>
+                        <p><strong>Harga per Iuran:</strong> Rp {detailData?.targetPay}</p>
 
                         <div className="mt-4 flex items-center space-x-2">
                             <button onClick={() => setJumlahLot((prev) => Math.max(1, prev - 1))}>-</button>
@@ -164,7 +164,7 @@ export default function ArisanDetail({ }) {
                             <button onClick={() => setJumlahLot((prev) => prev + 1)}>+</button>
                         </div>
 
-                        <p className="mt-4"><strong>Total:</strong> Rp {nominal}</p>
+                        <p className="mt-4"><strong>Total Iuran:</strong> Rp {nominal}</p>
 
                         <div className="flex justify-between mt-6">
                             <button onClick={handleJoin} className="bg-green-900 text-white px-4 py-2 rounded">

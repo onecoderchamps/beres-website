@@ -18,28 +18,23 @@ const Deskripsi = ({ data }) => {
     <div className="flex flex-col w-full">
       <div className="p-5 space-y-4">
         <div className="flex justify-between">
-          <span className="font-semibold text-gray-700">Title</span>
+          <span className="font-semibold text-gray-700">Nama Asset</span>
           <span className="text-right text-gray-800 ml-4">{data.title}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="font-semibold text-gray-700">Keterangan</span>
+          <span className="font-semibold text-gray-700">Alamat</span>
           <span className="text-right text-gray-800 ml-4">{data.keterangan}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="font-semibold text-gray-700">Target</span>
+          <span className="font-semibold text-gray-700">Harga Total</span>
           <span className="text-right text-gray-800 ml-4">Rp {data.totalPrice.toLocaleString('id')}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="font-semibold text-gray-700">Iuran Bulanan</span>
+          <span className="font-semibold text-gray-700">Harga / Lembar</span>
           <span className="text-right text-gray-800 ml-4">Rp {data.targetPay.toLocaleString('id')}</span>
-        </div>
-
-        <div className="flex justify-between">
-          <span className="font-semibold text-gray-700">Durasi</span>
-          <span className="text-right text-gray-800 ml-4">{data.totalSlot.toLocaleString('id')} Bulan</span>
         </div>
 
         <hr className="border-t border-gray-300 my-4" />
