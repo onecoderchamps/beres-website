@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { getData, postData } from '../../api/service';
 import PatunganComponent from './PatunganComponent';
 import BackButton from '../../component/BackButton';
+import { useNavigate } from 'react-router-dom';
 
-const PatunganScreen = ({ navigation }) => {
+const PatunganScreen = ({  }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Form state
   const [title, setTitle] = useState('');
@@ -148,7 +150,7 @@ const PatunganScreen = ({ navigation }) => {
       ) : (
         <div className="grid grid-cols-2 gap-4">
           {patunganData.map((item) => (
-            <div key={item.id} className="cursor-pointer" onClick={() => navigation.navigate("PatunganDetail", { data: item })}>
+            <div key={item.id} className="cursor-pointer" onClick={() => navigate('/PatunganDetail/'+item.id, { data: item })}>
               <PatunganComponent data={item} />
             </div>
           ))}

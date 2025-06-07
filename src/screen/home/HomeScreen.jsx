@@ -71,7 +71,7 @@ function HomeScreen() {
             <div
               key={idx}
               className="flex-none w-50"
-              onClick={() => navigate(`/PatunganDetail/${item.id}`)}
+              onClick={() => navigate(`/ArisanDetail/${item.id}`)}
             >
               <ArisanComponent data={item} />
             </div>

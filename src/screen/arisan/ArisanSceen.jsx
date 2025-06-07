@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import ArisanComponent from './ArisanComponent';
 import { getData, postData } from '../../api/service';
 import BackButton from '../../component/BackButton';
+import { useNavigate } from 'react-router-dom';
 
-const ArisanScreen = ({ navigate }) => {
+const ArisanScreen = ({  }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -105,7 +108,7 @@ const ArisanScreen = ({ navigate }) => {
           {arisanData.map((item, index) => (
             <div
               key={index}
-              onClick={() => navigate('ArisanDetail', { data: item })}
+              onClick={() => navigate('/ArisanDetail/'+item.id, { data: item })}
               className="cursor-pointer w-[calc(50%-0.5rem)]"
             >
               <ArisanComponent data={item} />
