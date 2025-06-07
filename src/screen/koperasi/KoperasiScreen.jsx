@@ -114,7 +114,6 @@ const KoperasiScreen = () => {
             ) : (
                 <div className="max-w-xl mx-auto">
                     <div className="text-center mb-6">
-                        <div className="text-2xl">💰</div>
                         <p className="text-gray-600 mt-2">Iuran Wajib Bulanan</p>
                         <p className="text-2xl font-bold text-[#3f2e3e]">Rp {rekening.toLocaleString('id-ID')}</p>
                     </div>

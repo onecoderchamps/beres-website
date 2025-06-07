@@ -66,6 +66,15 @@ const CategorySelector = () => {
           navigate(`/SedekahScreen`);
         }
         break;
+      case 'MyAsset':
+        navigate('/AktifitasPage');
+        break;
+      case 'MyProfile':
+        navigate('/AkunPage');
+        break;
+      case 'Edukasi':
+        navigate('/EdukasiScreen');
+        break;
       default:
         alert("Fitur Segera Hadir")
         break;

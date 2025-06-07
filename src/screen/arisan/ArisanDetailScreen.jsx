@@ -66,7 +66,7 @@ export default function ArisanDetail({ }) {
 
     const handlePay = async () => {
         try {
-            await postData('Arisan/PayArisan', { idTransaksi: data.id });
+            await postData('Arisan/PayArisan', { idTransaksi: id });
             getArisanData();
             setModalPayment(false);
         } catch (err) {

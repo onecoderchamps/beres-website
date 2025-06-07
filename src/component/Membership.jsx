@@ -65,7 +65,7 @@ const MembershipCard = () => {
     <div className="bg-gray-200 rounded-xl shadow-md p-4 mx-4 my-5">
       <div className="flex justify-between">
         <div className="flex-1 cursor-pointer" onClick={getDatabase}>
-          <p className="text-gray-800 font-semibold">Saldo</p>
+          <p className="text-gray-800 font-semibold">Saldo </p>
           <p className="text-black text-xl font-bold mt-2">Rp {formatCurrency(data.balance)}</p>
           <p className="text-xs font-semibold">Klik untuk update saldo</p>
         </div>

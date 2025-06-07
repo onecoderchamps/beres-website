@@ -12,6 +12,9 @@ import ArisanScreen from "./screen/arisan/ArisanSceen";
 import SedekahScreen from "./screen/sedekah/SedekahScreen";
 import ArisanDetail from "./screen/arisan/ArisanDetailScreen";
 import PatunganDetail from "./screen/patungan/PatunganDetailScreen";
+import AktifitasPage from "./screen/home/MyAssetScreen";
+import AkunPage from "./screen/home/MyProfileScreen";
+import EdukasiScreen from "./screen/home/EdukasiScreen";
 
 
 function App() {
@@ -21,6 +24,12 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeSelector />} />
         <Route path="/HomeScreen" element={<HomeScreen />} />
+        <Route path="/AktifitasPage" element={<AktifitasPage />} />
+        <Route path="/AkunPage" element={<AkunPage />} />
+        <Route path="/EdukasiScreen" element={<EdukasiScreen />} />
+
+
+
         <Route path="/LoginScreen" element={<LoginScreen />} />
         <Route path="/RegisterScreen" element={<RegisterScreen />} />
         <Route path="/OtpScreen" element={<OtpVerificationScreen />} />

@@ -41,9 +41,9 @@ const Member = ({ data, getPatunganDatabase }) => {
           <tr>
             <th className="p-2 border-b">No</th>
             <th className="p-2 border-b text-left">Nama</th>
-            <th className="p-2 border-b">Slot</th>
-            <th className="p-2 border-b text-center">Iuran {bulanSekarang}</th>
-            <th className="p-2 border-b text-center">Terima</th>
+            <th className="p-2 border-b">Lembar Saham</th>
+            {/* <th className="p-2 border-b text-center">Total</th> */}
+            {/* <th className="p-2 border-b text-center">Terima</th> */}
           </tr>
         </thead>
         <tbody>
@@ -52,14 +52,14 @@ const Member = ({ data, getPatunganDatabase }) => {
               <td className="p-2 text-center">{index + 1}</td>
               <td className="p-2">{item.name}</td>
               <td className="p-2 text-center">{item.jumlahLot}</td>
-              <td className="p-2 text-center">
+              {/* <td className="p-2 text-center">
                 {item.isMonthPayed ? (
                   <Check size={16} className="text-green-600 inline" />
                 ) : (
                   <X size={16} className="text-red-600 inline" />
                 )}
-              </td>
-              <td className="p-2 text-center">
+              </td> */}
+              {/* <td className="p-2 text-center">
                 {item.isPayed ? (
                   <Check size={16} className="text-green-600 inline" />
                 ) : userData?.role === '2' ? (
@@ -72,7 +72,7 @@ const Member = ({ data, getPatunganDatabase }) => {
                 ) : (
                   <X size={16} className="text-red-600 inline" />
                 )}
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
