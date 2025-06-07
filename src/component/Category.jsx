@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import {
   MdStore,
-  MdAttachMoney,
+  MdPhoneIphone,
   MdHome,
   MdVolunteerActivism,
-  MdEmojiEvents
+  MdManageAccounts,
+  MdMenuBook,
+  MdPieChart,
+  MdAccountBalance
 } from 'react-icons/md';
 import { getData } from '../api/service';
 import { useNavigate } from 'react-router-dom';
 import { GiGoldBar } from 'react-icons/gi';
 
 const categories = [
+  { key: 'Edukasi', label: 'Edukasi', icon: MdMenuBook },
   { key: 'Patungan', label: 'Patungan', icon: MdStore },
   { key: 'Arisan', label: 'Arisan', icon: GiGoldBar },
-  { key: 'Koperasi', label: 'Koperasi', icon: MdHome },
   { key: 'Sedekah', label: 'Sedekah', icon: MdVolunteerActivism },
+  { key: 'Koperasi', label: 'Koperasi', icon: MdAccountBalance },
+  { key: 'PPOB', label: 'PPOB', icon: MdPhoneIphone },
+  { key: 'MyAsset', label: 'MyAsset', icon: MdPieChart },
+  { key: 'MyProfile', label: 'MyProfile', icon: MdManageAccounts },
 ];
 
 const CategorySelector = () => {
@@ -60,6 +67,7 @@ const CategorySelector = () => {
         }
         break;
       default:
+        alert("Fitur Segera Hadir")
         break;
     }
   };
@@ -70,11 +78,7 @@ const CategorySelector = () => {
         <button
           key={key}
           onClick={() => handleCategorySelect(key)}
-          className={`w-18 h-18 flex flex-col items-center justify-center rounded-2xl shadow-md transition 
-            ${selected === key
-              ? 'bg-green-800 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+          className={`w-18 h-18 flex flex-col items-center justify-center rounded-2xl shadow-md transition bg-gray-200 text-gray-700 hover:bg-gray-300`}
         >
           <Icon size={28} className="mb-1" />
           <span className="text-sm font-semibold ">{label}</span>
