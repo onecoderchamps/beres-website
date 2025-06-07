@@ -77,7 +77,7 @@ function HomeScreen() {
             </div>
           )}
       </div>
-      <h2 className="text-sm text-center text-gray-900 mt-6 ml-3 mb-2 pl-1">PT Patungan Properti Indonesia</h2>
+      <h2 className="text-sm text-center text-gray-900 mt-6 ml-3 mb-2 pl-1">PT PATUNGAN PROPERTI INTERNASIONAL</h2>
     </div>
   );
 }

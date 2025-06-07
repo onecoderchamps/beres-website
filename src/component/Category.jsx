@@ -3,16 +3,18 @@ import {
   MdStore,
   MdAttachMoney,
   MdHome,
-  MdMosque,
+  MdVolunteerActivism,
+  MdEmojiEvents
 } from 'react-icons/md';
 import { getData } from '../api/service';
 import { useNavigate } from 'react-router-dom';
+import { GiGoldBar } from 'react-icons/gi';
 
 const categories = [
   { key: 'Patungan', label: 'Patungan', icon: MdStore },
-  { key: 'Arisan', label: 'Arisan', icon: MdAttachMoney },
+  { key: 'Arisan', label: 'Arisan', icon: GiGoldBar },
   { key: 'Koperasi', label: 'Koperasi', icon: MdHome },
-  { key: 'Sedekah', label: 'Sedekah', icon: MdMosque },
+  { key: 'Sedekah', label: 'Sedekah', icon: MdVolunteerActivism },
 ];
 
 const CategorySelector = () => {
@@ -44,9 +46,11 @@ const CategorySelector = () => {
         navigate('/Patungan');
         break;
       case 'Koperasi':
+        navigate('/KoperasiScreen');
+        break;
       case 'Sedekah':
         if (!dataProfile.isMember) {
-          navigate('/Register');
+          navigate('/RegisterScreen');
         } else {
           navigate(`/${key}`);
         }

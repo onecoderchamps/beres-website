@@ -75,7 +75,7 @@ const MembershipCard = () => {
             <MdSwapHoriz size={24} />
             <span className="text-xs font-bold mt-1">Transfer</span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer" onClick={() => window.location.href='/saldo'}>
+          <div className="flex flex-col items-center cursor-pointer" onClick={() => window.location.href='/SaldoScreen'}>
             <MdAddCircleOutline size={24} />
             <span className="text-xs font-bold mt-1">TopUp</span>
           </div>
