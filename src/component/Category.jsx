@@ -40,19 +40,23 @@ const CategorySelector = () => {
 
     switch (key) {
       case 'Arisan':
-        navigate('/Arisan');
+        navigate('/ArisanScreen');
         break;
       case 'Patungan':
-        navigate('/Patungan');
+        navigate('/PatunganScreen');
         break;
       case 'Koperasi':
-        navigate('/KoperasiScreen');
+        if (!dataProfile.isMember) {
+          navigate('/RegisterScreen');
+        } else {
+          navigate(`/KoperasiScreen`);
+        }
         break;
       case 'Sedekah':
         if (!dataProfile.isMember) {
           navigate('/RegisterScreen');
         } else {
-          navigate(`/${key}`);
+          navigate(`/SedekahScreen`);
         }
         break;
       default:

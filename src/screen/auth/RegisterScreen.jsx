@@ -38,7 +38,7 @@ const RegisterScreen = ({ navigateToHome }) => {
       const userData = { fullname, email, noNIK, address };
       await postData('auth/updateProfile', userData);
       alert('Pendaftaran berhasil.');
-      navigateToHome();
+      window.location.href = '/';
     } catch (err) {
       alert(err || "Transaksi Tahunan Selesai");
     } finally {

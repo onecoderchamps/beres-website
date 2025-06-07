@@ -7,6 +7,9 @@ import HomeSelector from "./screen/HomeSelector";
 import SaldoScreen from "./screen/saldo/SaldoScreen";
 import KoperasiScreen from "./screen/koperasi/KoperasiScreen";
 import RegisterScreen from "./screen/auth/RegisterScreen";
+import PatunganScreen from "./screen/patungan/PatunganSceen";
+import ArisanScreen from "./screen/arisan/ArisanSceen";
+import SedekahScreen from "./screen/sedekah/SedekahScreen";
 
 
 function App() {
@@ -18,12 +21,12 @@ function App() {
         <Route path="/HomeScreen" element={<HomeScreen />} />
         <Route path="/LoginScreen" element={<LoginScreen />} />
         <Route path="/RegisterScreen" element={<RegisterScreen />} />
-
         <Route path="/OtpScreen" element={<OtpVerificationScreen />} />
         <Route path="/SaldoScreen" element={<SaldoScreen />} />
         <Route path="/KoperasiScreen" element={<KoperasiScreen />} />
-
-
+        <Route path="/PatunganScreen" element={<PatunganScreen />} />
+        <Route path="/ArisanScreen" element={<ArisanScreen />} />
+        <Route path="/SedekahScreen" element={<SedekahScreen />} />
       </Routes>
     </BrowserRouter>
   );
