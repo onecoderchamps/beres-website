@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Base URL API
-// const API_URL = 'https://beres-backend-609517395039.asia-southeast2.run.app/api/v1/';
-const API_URL = 'http://localhost:5214/api/v1/';
+const API_URL = 'https://beres-backend-609517395039.asia-southeast2.run.app/api/v1/';
+// const API_URL = 'http://localhost:5214/api/v1/';
 
 const api = axios.create({
   baseURL: API_URL,
