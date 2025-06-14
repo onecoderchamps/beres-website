@@ -58,7 +58,7 @@ const ArisanComponent = ({ data }) => {
           <div className="flex-1 text-center">
             <p className="text-gray-600 text-sm">Iuran</p>
             <p className="text-black font-bold text-md mt-1">
-              Rp {data.totalPrice.toLocaleString('id-ID')}
+              Rp {data.targetPay.toLocaleString('id-ID')}
             </p>
           </div>
         </div>

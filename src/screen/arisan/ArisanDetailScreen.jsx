@@ -49,11 +49,11 @@ export default function ArisanDetail({ }) {
 
     const handleJoin = async () => {
         try {
-            await postData('Arisan/AddNewArisanMember', {
+            await postData('Arisan/AddNewArisanMemberbyAdmin', {
                 idUser: datas?.phone,
                 idArisan: id,
                 phoneNumber: datas?.phone,
-                jumlahLot,
+                jumlahLot: 1,
                 isActive: true,
                 isPayed: false,
             });
@@ -119,9 +119,6 @@ export default function ArisanDetail({ }) {
                 {activeTab === 'Member' && <Member data={detailData} getArisanDatabase={getArisanData} />}
                 {/* {activeTab === 'Chat' && <Chat data={detailData} />} */}
             </div>
-
-            {/* Floating Button */}
-            {detailData?.statusMember?.isMembership === false && (
                 <button
                     onClick={() => {
                         setModalVisible(true);
@@ -131,9 +128,8 @@ export default function ArisanDetail({ }) {
                 >
                     Gabung Member
                 </button>
-            )}
 
-            {detailData?.statusMember?.isMembership && !detailData?.statusMember?.isPayMonth && (
+            {/* {detailData?.statusMember?.isMembership && !detailData?.statusMember?.isPayMonth && (
                 <button
                     onClick={() => {
                         setModalPayment(true);
@@ -143,17 +139,17 @@ export default function ArisanDetail({ }) {
                 >
                     Bayar Iuran
                 </button>
-            )}
+            )} */}
 
             {/* Gabung Member Modal */}
             {modalVisible && (
                 <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-999999 p-10">
                     <div className="bg-white p-6 rounded-lg w-full max-w-md">
                         <h2 className="text-xl font-bold mb-4">Gabung Member</h2>
-                        <p><strong>Saldo:</strong> Rp {datas?.balance}</p>
-                        <p><strong>Harga per Iuran:</strong> Rp {detailData?.targetPay}</p>
+                        <p><strong>Saldo:</strong> Rp {datas?.balance?.toLocaleString('id')}</p>
+                        <p><strong>Harga per Iuran:</strong> Rp {detailData?.targetPay?.toLocaleString('id')}</p>
 
-                        <div className="mt-4 flex items-center space-x-2">
+                        {/* <div className="mt-4 flex items-center space-x-2">
                             <button onClick={() => setJumlahLot((prev) => Math.max(1, prev - 1))}>-</button>
                             <input
                                 type="number"
@@ -162,13 +158,13 @@ export default function ArisanDetail({ }) {
                                 className="border p-2 w-16 text-center"
                             />
                             <button onClick={() => setJumlahLot((prev) => prev + 1)}>+</button>
-                        </div>
+                        </div> */}
 
-                        <p className="mt-4"><strong>Total Iuran:</strong> Rp {nominal}</p>
+                        <p><strong>Total Iuran:</strong> Rp {nominal?.toLocaleString('id')}</p>
 
                         <div className="flex justify-between mt-6">
                             <button onClick={handleJoin} className="bg-green-900 text-white px-4 py-2 rounded">
-                                Bayar Sekarang
+                                Gabung Sekarang
                             </button>
                             <button onClick={() => setModalVisible(false)} className="text-red-600">
                                 Batal

@@ -5,6 +5,10 @@ import { Check, X } from 'lucide-react';
 const Member = ({ data, getArisanDatabase }) => {
   const bulanSekarang = new Date().toLocaleString('id-ID', { month: 'long' });
   const [userData, setUserData] = useState(null);
+  const [modalPayment, setModalPayment] = useState(false);
+  const [detailMember, setdetailMember] = useState(null);
+
+
 
   const getDatabase = async () => {
     try {
@@ -20,17 +24,31 @@ const Member = ({ data, getArisanDatabase }) => {
   }, []);
 
   const handleBayar = async (items) => {
-    const formData = {
-      idTransaksi: data.id,
-      idUser: items?.idUser,
-    };
+    setModalPayment(true);
+    setdetailMember(items);
+    // const formData = {
+    //   idTransaksi: data.id,
+    //   idUser: items?.idUser,
+    // };
+    // try {
+    //   const response = await postData('Arisan/PayCompleteArisan', formData);
+    //   alert(response.message);
+    //   getArisanDatabase();
+    // } catch (error) {
+    //   console.log(error);
+    //   alert(error?.data?.errorMessage?.Error || "Terjadi kesalahan saat memverifikasi.");
+    // }
+  };
+
+  const handlePay = async (items) => {
+    // setModalPayment(true);
+    // setdetailMember(items);
     try {
-      const response = await postData('Arisan/PayCompleteArisan', formData);
-      alert(response.message);
+      await postData('Arisan/PayArisan', { idTransaksi: data.id });
       getArisanDatabase();
-    } catch (error) {
-      console.log(error);
-      alert(error?.data?.errorMessage?.Error || "Terjadi kesalahan saat memverifikasi.");
+      setModalPayment(false);
+    } catch (err) {
+      alert(err || 'Error paying');
     }
   };
 
@@ -56,19 +74,21 @@ const Member = ({ data, getArisanDatabase }) => {
                 {item.isMonthPayed ? (
                   <Check size={16} className="text-green-600 inline" />
                 ) : (
-                  <X size={16} className="text-red-600 inline" />
+                  item.idUser === userData?.phone ? (
+                    <button
+                      onClick={() => handleBayar(item)}
+                      className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
+                    >
+                      Bayar
+                    </button>
+                  ) : (
+                    <X size={16} className="text-red-600 inline" />
+                  )
                 )}
               </td>
               <td className="p-2 text-center">
                 {item.isPayed ? (
                   <Check size={16} className="text-green-600 inline" />
-                ) : userData?.role === '2' ? (
-                  <button
-                    onClick={() => handleBayar(item)}
-                    className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
-                  >
-                    Approve
-                  </button>
                 ) : (
                   <X size={16} className="text-red-600 inline" />
                 )}
@@ -77,6 +97,25 @@ const Member = ({ data, getArisanDatabase }) => {
           ))}
         </tbody>
       </table>
+      {/* Bayar Iuran Modal */}
+      {modalPayment && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-999999">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Bayar Iuran</h2>
+            <p><strong>Saldo:</strong> Rp {userData?.balance?.toLocaleString('id')}</p>
+            <p><strong>Iuran:</strong> Rp {(data?.targetPay * data.memberArisan.filter((items)=> items.idUser === userData.phone ).length).toLocaleString('id')}</p>
+
+            <div className="flex justify-between mt-6">
+              <button onClick={handlePay} className="bg-green-900 text-white px-4 py-2 rounded">
+                Bayar Sekarang
+              </button>
+              <button onClick={() => setModalPayment(false)} className="text-red-600">
+                Batal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -27,9 +27,6 @@ function App() {
         <Route path="/AktifitasPage" element={<AktifitasPage />} />
         <Route path="/AkunPage" element={<AkunPage />} />
         <Route path="/EdukasiScreen" element={<EdukasiScreen />} />
-
-
-
         <Route path="/LoginScreen" element={<LoginScreen />} />
         <Route path="/RegisterScreen" element={<RegisterScreen />} />
         <Route path="/OtpScreen" element={<OtpVerificationScreen />} />

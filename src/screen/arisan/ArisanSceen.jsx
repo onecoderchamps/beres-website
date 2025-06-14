@@ -117,7 +117,7 @@ const ArisanScreen = ({  }) => {
         </div>
       )}
 
-      {userData?.role === '2' && (
+      {/* {userData?.role === '2' && (
         <button
           onClick={() => setModalVisible(true)}
           className="fixed bottom-8 right-8 bg-green-700 hover:bg-green-800 text-white p-4 rounded-full shadow-lg text-xl font-bold"
@@ -125,7 +125,7 @@ const ArisanScreen = ({  }) => {
         >
           +
         </button>
-      )}
+      )} */}
 
       {/* Modal */}
       {modalVisible && (
