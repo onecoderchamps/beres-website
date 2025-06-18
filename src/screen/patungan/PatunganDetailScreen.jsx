@@ -97,7 +97,7 @@ export default function PatunganDetail({ }) {
 
             {/* Tabs */}
             <div className="flex justify-around bg-green-900 text-white py-3">
-                {['Deskripsi', 'Syarat', 'Member', 'Chat'].map((tab) => {
+                {['Deskripsi', 'Syarat', 'Member'].map((tab) => {
                     if (!detailData?.statusMember?.isMembership && (tab === 'Member' || tab === 'Chat')) return null;
                     return (
                         <button

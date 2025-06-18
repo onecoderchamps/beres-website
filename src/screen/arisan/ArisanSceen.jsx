@@ -105,15 +105,17 @@ const ArisanScreen = ({  }) => {
         <div className="text-center mt-10">Loading...</div>
       ) : (
         <div className="flex flex-wrap gap-4 justify-between">
-          {arisanData.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => navigate('/ArisanDetail/'+item.id, { data: item })}
-              className="cursor-pointer w-[calc(50%-0.5rem)]"
-            >
-              <ArisanComponent data={item} />
-            </div>
-          ))}
+          {arisanData.map((item, index) =>
+            item.sisaSlot > 0 && (
+              <div
+                key={index}
+                onClick={() => navigate('/ArisanDetail/' + item.id, { data: item })}
+                className="cursor-pointer w-[calc(50%-0.5rem)]"
+              >
+                <ArisanComponent data={item} />
+              </div>
+            )
+          )}
         </div>
       )}
 

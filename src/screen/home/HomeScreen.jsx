@@ -60,7 +60,9 @@ function HomeScreen() {
             className="flex-none w-72 cursor-pointer"
             onClick={() => navigate(`/PatunganDetail/${item.id}`)}
           >
-            <PatunganCard data={item} />
+            {item.sisaSlot > 0 &&
+              <PatunganCard data={item} />
+            }
           </div>
         ))}
       </div>
@@ -73,7 +75,9 @@ function HomeScreen() {
               className="flex-none w-50"
               onClick={() => navigate(`/ArisanDetail/${item.id}`)}
             >
-              <ArisanComponent data={item} />
+              {item.sisaSlot > 0 &&
+                <ArisanComponent data={item} />
+              }
             </div>
           )}
       </div>
