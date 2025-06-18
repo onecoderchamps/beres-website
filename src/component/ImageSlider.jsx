@@ -8,7 +8,7 @@ const ImageSlider = ({  }) => {
 
   const getDatabase = async () => {
         try {
-            const response = await getData('rekening/Banner');
+            const response = await getData('Banner');
             setdata(response.data);
         } catch (error) {
             Alert.alert("Error", error || "Terjadi kesalahan.");
@@ -46,7 +46,7 @@ const ImageSlider = ({  }) => {
         {data.map((src, index) => (
           <img
             key={index}
-            src={src}
+            src={src.image}
             alt={`slide-${index}`}
             className="flex-shrink-0 w-full h-full object-cover snap-start"
           />
