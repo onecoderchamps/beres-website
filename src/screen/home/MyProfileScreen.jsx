@@ -31,7 +31,7 @@ const AkunPage = () => {
   // Handles user sign out
   const signOut = () => {
     localStorage.removeItem('accessTokens');
-    window.location.href = '/login'; // Redirect to login page
+    window.location.href = '/LoginScreen'; // Redirect to login page
   };
 
   // Confirmation for logout
