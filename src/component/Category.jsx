@@ -85,7 +85,7 @@ const CategorySelector = () => {
         navigate('/EdukasiScreen');
         break;
       case 'PPOB':
-        alert("Fitur PPOB Segera Hadir!");
+        navigate('/PPOBScreen');
         break;
       default:
         alert("Fitur Segera Hadir!");

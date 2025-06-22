@@ -15,6 +15,7 @@ import PatunganDetail from "./screen/patungan/PatunganDetailScreen";
 import AktifitasPage from "./screen/home/MyAssetScreen";
 import AkunPage from "./screen/home/MyProfileScreen";
 import EdukasiScreen from "./screen/home/EdukasiScreen";
+import PPOBScreen from "./screen/ppob/PpobScreen";
 
 
 function App() {
@@ -38,6 +39,8 @@ function App() {
         <Route path="/ArisanScreen" element={<ArisanScreen />} />
         <Route path="/ArisanDetail/:id" element={<ArisanDetail />} />
         <Route path="/SedekahScreen" element={<SedekahScreen />} />
+        <Route path="/PPOBScreen" element={<PPOBScreen />} />
+
       </Routes>
     </BrowserRouter>
   );

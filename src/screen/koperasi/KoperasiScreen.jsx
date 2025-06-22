@@ -105,7 +105,7 @@ const KoperasiScreen = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="min-h-screen bg-gray-50 p-2">
             <BackButton title={"Koperasi"} />
             {loading ? (
                 <div className="flex justify-center items-center h-screen">
@@ -129,17 +129,21 @@ const KoperasiScreen = () => {
 
                     <h2 className="text-xl font-bold text-[#3f2e3e] mb-4">Riwayat Iuran</h2>
                     <div className="space-y-4">
-                        {history.map((item) => (
-                            <div key={item.id} className="flex justify-between border-b pb-2">
-                                <div>
-                                    <p className="font-semibold">{item.ket}</p>
-                                    <p className="text-sm text-gray-500">{formatDateTime(item.createdAt)}</p>
+                        {history.length > 0 ? (
+                            history.map((item) => (
+                                <div key={item.id} className="flex justify-between border-b pb-2">
+                                    <div>
+                                        <p className="font-semibold">{item.ket}</p>
+                                        <p className="text-sm text-gray-500">{formatDateTime(item.createdAt)}</p>
+                                    </div>
+                                    <p className={`font-bold ${item.status === 'Income' ? 'text-green-600' : 'text-red-500'}`}>
+                                        {item.status === 'Income' ? '+ ' : '- '}Rp {item.nominal.toLocaleString('id-ID')}
+                                    </p>
                                 </div>
-                                <p className={`font-bold ${item.status === 'Income' ? 'text-green-600' : 'text-red-500'}`}>
-                                    {item.status === 'Income' ? '+ ' : '- '}Rp {item.nominal.toLocaleString('id-ID')}
-                                </p>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p className="text-center text-gray-600 py-10 text-lg">Belum ada riwayat transaksi koperasi.</p>
+                        )}
                     </div>
 
                     {modalVisible && (

@@ -200,7 +200,7 @@ const EdukasiScreen = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-8"> {/* Latar belakang abu-abu muda */}
+        <div className="min-h-screen bg-gray-50 p-2"> {/* Latar belakang abu-abu muda */}
             <BackButton title={'Materi Edukasi'} />
 
             {/* Grid Materi Edukasi */}

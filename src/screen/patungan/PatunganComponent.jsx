@@ -1,63 +1,79 @@
 import React from 'react';
+// Assuming you are using an icon library like 'react-icons'
+// For example, if using react-icons/md for Material Design icons
+import { MdHome, MdStorefront, MdBusiness, MdWarehouse } from 'react-icons/md'; 
+// Or if using react-icons/fa for Font Awesome:
+// import { FaHome, FaStore, FaBuilding, FaWarehouse } from 'react-icons/fa';
 
+// Map your data 'type' to the actual icon component and desired color
 const iconMap = {
   rumah: {
-    name: 'home-outline', // (you might use heroicons or any icon lib in web)
-    color: 'text-green-500',
+    icon: MdHome, // or FaHome
+    color: 'text-green-600', // A slightly darker green
   },
   retail: {
-    name: 'storefront-outline',
-    color: 'text-blue-500',
+    icon: MdStorefront, // or FaStore
+    color: 'text-blue-600', // A slightly darker blue
   },
   ruko: {
-    name: 'office-building-marker',
-    color: 'text-yellow-500',
+    icon: MdBusiness, // or FaBuilding
+    color: 'text-yellow-600', // A slightly darker yellow
   },
   aset: {
-    name: 'warehouse',
-    color: 'text-purple-600',
+    icon: MdWarehouse, // or FaWarehouse
+    color: 'text-purple-700', // A slightly darker purple
   },
 };
 
 const PatunganComponent = ({ data }) => {
-  const iconInfo = iconMap[data.type] || iconMap['aset'];
+  // Get icon info based on data.type, default to 'aset' if not found
+  const { icon: IconComponent, color: iconColor } = iconMap[data.type] || iconMap['aset'];
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-black/20 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden 
+                    transform hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out">
       <div className="relative">
         <img
           src={data.banner[0]}
           alt={data.title}
-          className="w-full object-cover"
-          style={{ height: '160px' }}
+          className="w-full object-cover object-center" // object-center to ensure main part of image is visible
+          style={{ height: '180px' }} // Slightly increased height for better visual impact
         />
 
         {/* Ribbon "Sisa Slot" */}
         {data.sisaSlot > 0 && (
           <div
-            className="absolute top-2 right-[-40px] bg-yellow-400 px-10 py-1 rounded shadow-md text-black font-bold text-xs text-center"
-            style={{ transform: 'rotate(45deg)' }}
+            className="absolute top-5 right-[-50px] bg-red-500 text-white px-10 py-1 
+                       rounded-bl-lg shadow-md font-bold text-sm text-center transform rotate-45"
+            // Adjusted right position and increased width for better visibility of "Sisa XX"
+            // Changed color to red for urgency, rounded bottom-left for a nicer shape
           >
-            Sisa {data.sisaSlot}
+            Sisa {data.sisaSlot} Slot!
           </div>
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="text-black font-bold text-lg truncate">{data.title}</h3>
-        <p className="text-gray-500 mb-4 truncate">{data.keterangan}</p>
+      <div className="p-5"> {/* Increased padding for more breathing room */}
+        <div className="flex items-center mb-2"> {/* Icon and Title */}
+          <h3 className="text-gray-800 font-extrabold text-xl truncate" title={data.title}>
+            {data.title}
+          </h3>
+        </div>
+        <p className="text-gray-500 text-sm mb-4 line-clamp-2" title={data.keterangan}>
+          {data.keterangan}
+        </p>
 
-        <div className="flex justify-between">
-          <div className="flex-1 text-center">
-            <p className="text-gray-600 text-sm">Harga</p>
-            <p className="text-black font-bold text-md mt-1">
+        <div className="flex justify-between items-end border-t border-gray-100 pt-4"> {/* Added top border for separation */}
+          <div className="flex-1 text-left pr-2"> {/* Align text left for better readability */}
+            <p className="text-gray-500 text-xs uppercase font-medium">Harga Per Slot</p>
+            <p className="text-green-700 font-bold text-lg mt-1">
               Rp {data.targetPay.toLocaleString('id-ID')}
             </p>
           </div>
 
-          <div className="flex-1 text-center">
-            <p className="text-gray-600 text-sm">Asset</p>
-            <p className="text-black font-bold text-md mt-1">
+          <div className="flex-1 text-right pl-2"> {/* Align text right for balance */}
+            <p className="text-gray-500 text-xs uppercase font-medium">Total Aset</p>
+            <p className="text-purple-700 font-bold text-lg mt-1">
               Rp {data.totalPrice.toLocaleString('id-ID')}
             </p>
           </div>

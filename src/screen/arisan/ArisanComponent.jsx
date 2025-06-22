@@ -1,64 +1,79 @@
 import React from 'react';
+// Import icons from react-icons. You might need to install it: npm install react-icons
+import { MdHome, MdStorefront, MdBusiness, MdWarehouse, MdAccountBalanceWallet } from 'react-icons/md';
 
+// Map your data 'type' to the actual icon component and desired color
 const iconMap = {
   rumah: {
-    name: 'home-outline', // (you might use heroicons or any icon lib in web)
-    color: 'text-green-500',
+    icon: MdHome,
+    color: 'text-green-600',
   },
   retail: {
-    name: 'storefront-outline',
-    color: 'text-blue-500',
+    icon: MdStorefront,
+    color: 'text-blue-600',
   },
   ruko: {
-    name: 'office-building-marker',
-    color: 'text-yellow-500',
+    icon: MdBusiness,
+    color: 'text-yellow-600',
   },
-  aset: {
-    name: 'warehouse',
-    color: 'text-purple-600',
+  aset: { // Default fallback
+    icon: MdWarehouse,
+    color: 'text-purple-700',
   },
+  // Add more types if needed for Arisan
+  arisan: { // A generic icon for Arisan type, if it's different from asset types
+    icon: MdAccountBalanceWallet, 
+    color: 'text-indigo-600',
+  }
 };
 
 const ArisanComponent = ({ data }) => {
-  const iconInfo = iconMap[data.type] || iconMap['aset'];
+  // Get icon info based on data.type, default to 'arisan' or 'aset' if not found
+  const { icon: IconComponent, color: iconColor } = iconMap[data.type] || iconMap['arisan'] || iconMap['aset'];
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-black/20 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden 
+                    transform hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out">
       <div className="relative">
         <img
-          src={data.banner[0]}
+          src={data.banner && data.banner[0] ? data.banner[0] : 'https://via.placeholder.com/400x200?text=No+Image'} // Fallback image
           alt={data.title}
-          className="w-full object-cover"
-          style={{ height: '160px' }}
+          className="w-full object-cover object-center"
+          style={{ height: '180px' }} // Slightly increased height for better visual impact
         />
 
         {/* Ribbon "Sisa Slot" */}
         {data.sisaSlot > 0 && (
           <div
-            className="absolute top-2 right-[-40px] bg-yellow-400 px-10 py-1 rounded shadow-md text-black font-bold text-xs text-center"
-            style={{ transform: 'rotate(45deg)' }}
+            className="absolute top-4 right-[-30px] bg-red-500 text-white px-10 py-1 
+                       rounded-bl-lg shadow-md font-bold text-sm text-center transform rotate-45"
+            // Adjusted right position and increased width for better visibility of "Sisa XX"
+            // Changed color to red for urgency, rounded bottom-left for a nicer shape
           >
             Sisa {data.sisaSlot}
           </div>
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="text-black font-bold text-lg truncate">{data.title}</h3>
-        <p className="text-gray-500 mb-4 truncate">{data.keterangan}</p>
+      <div className="p-5"> {/* Increased padding for more breathing room */}
+        <div className="flex items-center"> {/* Icon and Title */}
+          <h3 className="text-gray-800 font-extrabold text-xl truncate" title={data.title}>
+            {data.title}
+          </h3>
+        </div>
 
-        <div className="flex justify-between">
-          <div className="flex-1 text-center">
-            <p className="text-gray-600 text-sm">Bidang</p>
-            <p className="text-black font-bold text-md mt-1">
-              {data.keterangan}
+        <div className="flex justify-between items-end border-t border-gray-100 pt-4">
+          <div className="flex-1 text-left pr-2">
+            <p className="text-gray-500 text-xs uppercase font-medium">Bidang</p>
+            <p className="text-gray-700 font-bold text-base mt-1">
+              {data.keterangan || 'N/A'} {/* Uses data.keterangan for "Bidang" */}
             </p>
           </div>
 
-          <div className="flex-1 text-center">
-            <p className="text-gray-600 text-sm">Iuran</p>
-            <p className="text-black font-bold text-md mt-1">
-              Rp {data.targetPay.toLocaleString('id-ID')}
+          <div className="flex-1 text-right pl-2">
+            <p className="text-gray-500 text-xs uppercase font-medium">Iuran Bulanan</p>
+            <p className="text-indigo-600 font-bold text-lg mt-1">
+              Rp {data.targetPay?.toLocaleString('id-ID') || '0'} {/* Changed to targetAmount for Iuran */}
             </p>
           </div>
         </div>

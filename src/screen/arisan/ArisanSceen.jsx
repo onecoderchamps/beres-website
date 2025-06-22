@@ -1,92 +1,130 @@
 import React, { useEffect, useState } from 'react';
-import ArisanComponent from './ArisanComponent';
+import ArisanComponent from './ArisanComponent'; // Assuming ArisanComponent will also be styled separately
 import { getData, postData } from '../../api/service';
 import BackButton from '../../component/BackButton';
 import { useNavigate } from 'react-router-dom';
+import { FaPlus, FaSpinner, FaUsers, FaCalendarAlt } from 'react-icons/fa'; // Added icons
 
-const ArisanScreen = ({  }) => {
+const ArisanScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
+  // Form states for adding new arisan
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [keterangan, setKeterangan] = useState('');
-  const [targetLot, setTargetLot] = useState('');
-  const [targetAmount, setTargetAmount] = useState('');
-  const [penagihanDateText, setPenagihanDateText] = useState('');
+  const [keterangan, setKeterangan] = useState(''); // Additional description/notes
+  const [targetLot, setTargetLot] = useState(''); // Number of slots/members
+  const [targetAmount, setTargetAmount] = useState(''); // Amount per installment
+  const [penagihanDateText, setPenagihanDateText] = useState(''); // Date format DD MM YYYY
 
+  // File states (assuming these are handled by file input or similar, currently just arrays)
   const [bannerFiles, setBannerFiles] = useState([]);
   const [documentFiles, setDocumentFiles] = useState([]);
+
+  // Data states for displaying arisan list and user info
   const [arisanData, setArisanData] = useState([]);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null); // User session data
 
   useEffect(() => {
-    getDatabase();
-    getDatabaseArisan();
+    getDatabase(); // Fetches user session data
+    getDatabaseArisan(); // Fetches arisan initiatives
   }, []);
 
+  // Fetches user session data
   const getDatabase = async () => {
     try {
       const res = await getData('auth/verifySessions');
       setUserData(res.data);
     } catch (err) {
-      alert(err.message || 'Terjadi kesalahan saat verifikasi');
+      console.error("Error verifying session:", err);
+      // alert(err.message || 'Terjadi kesalahan saat verifikasi sesi.'); // Keep alert for production if desired
     }
   };
 
+  // Fetches arisan list data
   const getDatabaseArisan = async () => {
+    setLoading(true); // Ensure loading state is active
     try {
       const res = await getData('Arisan');
       setArisanData(res.data);
-      setLoading(false);
     } catch (err) {
-      alert(err.message || 'Gagal mengambil data');
+      console.error("Error fetching Arisan data:", err);
+      alert(err.message || 'Gagal mengambil data arisan.');
+      setArisanData([]); // Clear data on error
+    } finally {
+      setLoading(false); // Always stop loading
     }
   };
 
+  // Utility function for number formatting (already exists)
   const formatNumber = (val) => {
-    return val?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    if (!val) return '';
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
+  // Handles form submission for adding new arisan
   const handleSubmit = async () => {
-    if (!title || !description || !targetLot || !targetAmount || !penagihanDateText) {
-      alert('Harap isi semua kolom.');
+    if (!title.trim() || !description.trim() || !targetLot || !targetAmount || !penagihanDateText.trim()) {
+      alert('Harap isi semua kolom wajib: Judul, Deskripsi, Target Slot, Target Bulanan, dan Tanggal Penagihan.');
       return;
     }
 
-    const [dd, mm, yyyy] = penagihanDateText.split(' ');
-    const parsedDate = new Date(`${yyyy}-${mm}-${dd}T00:00:00Z`);
-    if (isNaN(parsedDate.getTime())) {
-      alert('Format tanggal tidak valid. Gunakan format DD MM YYYY');
+    // Parse date: DD MM YYYY format
+    const dateParts = penagihanDateText.trim().split(' ');
+    if (dateParts.length !== 3) {
+      alert('Format tanggal tidak valid. Gunakan format DD MM YYYY (contoh: 25 06 2025)');
       return;
+    }
+    const [dd, mm, yyyy] = dateParts;
+    // Construct Date object in YYYY-MM-DD format for robustness
+    const parsedDate = new Date(`${yyyy}-${mm}-${dd}T00:00:00Z`); // Use T00:00:00Z for UTC start of day
+
+    if (isNaN(parsedDate.getTime())) {
+      alert('Tanggal yang dimasukkan tidak valid. Pastikan format DD MM YYYY benar (contoh: 25 06 2025).');
+      return;
+    }
+    
+    // Convert targetLot and targetAmount to numbers
+    const numTargetLot = parseFloat(targetLot);
+    const numTargetAmount = parseFloat(targetAmount);
+
+    if (isNaN(numTargetLot) || numTargetLot <= 0) {
+        alert('Target Slot harus berupa angka positif.');
+        return;
+    }
+    if (isNaN(numTargetAmount) || numTargetAmount <= 0) {
+        alert('Target Bulanan harus berupa angka positif.');
+        return;
     }
 
     const body = {
-      title,
-      description,
-      keterangan,
-      banner: bannerFiles,
-      document: documentFiles,
-      location: 'Default Location',
-      targetLot: parseFloat(targetLot),
-      targetAmount: parseFloat(targetAmount),
+      title: title.trim(),
+      description: description.trim(),
+      keterangan: keterangan.trim(),
+      banner: bannerFiles, // Assuming this will contain URLs/paths after file upload
+      document: documentFiles, // Assuming this will contain URLs/paths after file upload
+      location: 'Default Location', // Consider making this dynamic if needed
+      targetLot: numTargetLot,
+      targetAmount: numTargetAmount,
       penagihanDate: parsedDate.toISOString(),
       isAvailable: true,
     };
 
     try {
       await postData('Arisan', body);
-      alert('Sukses menambahkan arisan');
+      alert('Sukses menambahkan arisan!');
       setModalVisible(false);
       resetForm();
-      getDatabaseArisan();
+      getDatabaseArisan(); // Refresh list after successful submission
     } catch (err) {
-      alert(err.message || 'Gagal submit');
+      console.error("Failed to add arisan:", err);
+      alert(err.response?.data?.message || err.message || 'Gagal menambahkan arisan. Silakan coba lagi.');
     }
   };
 
+  // Resets all form fields
   const resetForm = () => {
     setTitle('');
     setDescription('');
@@ -99,65 +137,37 @@ const ArisanScreen = ({  }) => {
   };
 
   return (
-    <div className="bg-white min-h-screen p-4">
+    <div className="min-h-screen bg-gray-50 p-2">
       <BackButton title={"Arisan"} />
+
       {loading ? (
-        <div className="text-center mt-10">Loading...</div>
-      ) : (
-        <div className="flex flex-wrap gap-4 justify-between">
-          {arisanData.map((item, index) =>
-            item.sisaSlot > 0 && (
-              <div
-                key={index}
-                onClick={() => navigate('/ArisanDetail/' + item.id, { data: item })}
-                className="cursor-pointer w-[calc(50%-0.5rem)]"
-              >
-                <ArisanComponent data={item} />
-              </div>
-            )
-          )}
+        <div className="flex justify-center items-center h-[calc(100vh-64px)]">
+          <FaSpinner className="animate-spin text-purple-600 text-6xl" />
         </div>
-      )}
+      ) : (
+        <div className="max-w-4xl mx-auto p-4 pt-6">
 
-      {/* {userData?.role === '2' && (
-        <button
-          onClick={() => setModalVisible(true)}
-          className="fixed bottom-8 right-8 bg-green-700 hover:bg-green-800 text-white p-4 rounded-full shadow-lg text-xl font-bold"
-          aria-label="Tambah Patungan"
-        >
-          +
-        </button>
-      )} */}
-
-      {/* Modal */}
-      {modalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg overflow-y-auto max-h-[90vh]">
-            <h2 className="text-xl font-bold mb-4">Tambah Arisan</h2>
-
-            <input placeholder="Judul" className="input mb-2" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <input placeholder="Deskripsi" className="input mb-2" value={description} onChange={(e) => setDescription(e.target.value)} />
-            <input placeholder="Keterangan" className="input mb-2" value={keterangan} onChange={(e) => setKeterangan(e.target.value)} />
-            <input placeholder="Target Slot" className="input mb-2" type="number" value={targetLot} onChange={(e) => setTargetLot(e.target.value)} />
-            <input placeholder="Target Bulanan" className="input mb-2" type="number" value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)} />
-            <input placeholder="Tanggal Penagihan (DD MM YYYY)" className="input mb-2" value={penagihanDateText} onChange={(e) => setPenagihanDateText(e.target.value)} />
-
-            {targetAmount * targetLot > 0 && (
-              <p className="text-center text-sm font-semibold mt-2">
-                Total: Rp {(targetAmount * targetLot).toLocaleString('id-ID')}
-              </p>
-            )}
-
-            {/* Simpan + Batal */}
-            <div className="flex justify-between mt-4">
-              <button onClick={handleSubmit} className="bg-green-600 text-white px-4 py-2 rounded">
-                Simpan
-              </button>
-              <button onClick={() => setModalVisible(false)} className="bg-gray-300 px-4 py-2 rounded">
-                Batal
-              </button>
+          {/* Arisan Grid */}
+          {arisanData.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {arisanData.map((item, index) =>
+                item.sisaSlot > 0 && ( // Only show arisan with available slots
+                  <div
+                    key={item.id || index} // Use item.id if available, fallback to index
+                    onClick={() => navigate('/ArisanDetail/' + item.id, { state: { data: item } })}
+                    className="cursor-pointer transform hover:scale-[1.03] transition-transform duration-200 ease-in-out"
+                  >
+                    <ArisanComponent data={item} />
+                  </div>
+                )
+              )}
             </div>
-          </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-gray-600 text-lg">Belum ada arisan yang tersedia saat ini.</p>
+              <p className="text-gray-500 mt-2">Ayo, buat arisan pertama Anda!</p>
+            </div>
+          )}
         </div>
       )}
     </div>
