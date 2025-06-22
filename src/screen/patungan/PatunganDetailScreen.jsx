@@ -135,9 +135,9 @@ export default function PatunganDetail() {
 
             {/* Tabs Section */}
             <div className="bg-white rounded-xl shadow-md mx-4 p-1 flex justify-around"> {/* Card-like tabs */}
-                {['Deskripsi', 'Syarat', 'Member'].map((tab) => {
+                {['Deskripsi', 'Syarat', 'Perkembangan'].map((tab) => {
                     // Conditional rendering for 'Member' tab based on membership status
-                    if (!detailData?.statusMember?.isMembership && tab === 'Member') return null;
+                    if (!detailData?.statusMember?.isMembership && tab === 'Perkembangan') return null;
                     // Original code also had 'Chat' tab conditionally, removed it as it's commented out in render
                     // if (!detailData?.statusMember?.isMembership && tab === 'Chat') return null;
                     return (
@@ -160,7 +160,7 @@ export default function PatunganDetail() {
             <div className="p-4 mx-auto max-w-4xl"> {/* Standard padding and max-width for content */}
                 {activeTab === 'Deskripsi' && detailData && <Deskripsi data={detailData} />}
                 {activeTab === 'Syarat' && detailData && <Syarat data={detailData} />}
-                {activeTab === 'Member' && detailData && <Member data={detailData} getPatunganDatabase={getPatunganData} />}
+                {activeTab === 'Perkembangan' && detailData && <Member data={detailData} getPatunganDatabase={getPatunganData} />}
                 {/* {activeTab === 'Chat' && detailData && <Chat data={detailData} />} */}
             </div>
 

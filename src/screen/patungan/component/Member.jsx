@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getData, postData } from '../../../api/service';
-import { CheckCircle, XCircle, TrendingUp, Users } from 'lucide-react'; // Import icons for better visuals
+import { CheckCircle, XCircle, TrendingUp, Users, History } from 'lucide-react';
 import { FaSpinner } from 'react-icons/fa';
 
 const Member = ({ data, getPatunganDatabase }) => {
@@ -15,8 +15,7 @@ const Member = ({ data, getPatunganDatabase }) => {
       const response = await getData('auth/verifySessions');
       setUserData(response.data);
     } catch (error) {
-      console.error("Error verifying user session:", error); // Log error for debugging
-      // alert(error.response?.data?.message || "Terjadi kesalahan saat memverifikasi sesi."); // Optional alert
+      console.error("Error verifying user session:", error);
     } finally {
       setLoadingUser(false);
     }
@@ -28,38 +27,78 @@ const Member = ({ data, getPatunganDatabase }) => {
 
   // Handle 'Approve' payment (for Admin/Role 2)
   const handleBayar = async (itemToApprove) => {
-    // Confirmation dialog for admin action
     if (!window.confirm(`Yakin ingin menyetujui pembayaran ${itemToApprove.name} untuk patungan ini?`)) {
       return;
     }
 
     const formData = {
-      idTransaksi: data.id, // 'data.id' here refers to Patungan ID, which seems consistent with API
-      idUser: itemToApprove?.idUser, // User ID of the member whose payment is being approved
+      idTransaksi: data.id,
+      idUser: itemToApprove?.idUser,
     };
     try {
       const response = await postData('Patungan/PayCompletePatungan', formData);
       alert(response.message || "Pembayaran berhasil disetujui!");
-      getPatunganDatabase(); // Refresh parent component data to update list
+      getPatunganDatabase();
     } catch (error) {
-      console.error("Error approving payment:", error); // Log detailed error
+      console.error("Error approving payment:", error);
       alert(error?.response?.data?.errorMessage?.Error || "Terjadi kesalahan saat menyetujui pembayaran.");
     }
   };
 
   // Dummy data for stock development overview (replace with actual data if available)
-  const dummyStockData = {
+  const dummyStockOverviewData = {
     currentValuePerLot: data.targetPay * 1.05, // Example: 5% increase from targetPay
     initialValuePerLot: data.targetPay,
     growthPercentage: 5, // Example growth
     lastUpdate: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
   };
 
+  // --- DUMMY DATA FOR STOCK PROCESS DEVELOPMENT LIST ---
+  // You will need to replace this with actual historical data fetched from your API
+  const dummyStockProcessList = [
+    {
+      date: new Date(2025, 0, 15).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      value: data.targetPay,
+      change: 0,
+      description: 'Nilai awal per lembar saham Patungan.',
+      type: 'initial'
+    },
+    {
+      date: new Date(2025, 1, 20).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      value: data.targetPay * 1.02,
+      change: 2,
+      description: 'Kenaikan nilai saham setelah update pertama.',
+      type: 'increase'
+    },
+    {
+      date: new Date(2025, 3, 5).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      value: data.targetPay * 1.05,
+      change: 3,
+      description: 'Kenaikan signifikan seiring progress proyek.',
+      type: 'increase'
+    },
+    {
+      date: new Date(2025, 4, 10).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      value: data.targetPay * 1.04,
+      change: -1,
+      description: 'Penurunan nilai sementara akibat fluktuasi pasar.',
+      type: 'decrease'
+    },
+    {
+      date: new Date(2025, 5, 22).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      value: data.targetPay * 1.05,
+      change: 1,
+      description: 'Nilai kembali stabil setelah penyesuaian pasar.',
+      type: 'increase'
+    },
+  ];
+  // --- END DUMMY DATA ---
+
   // Ensure data.memberPatungan is an array before mapping
   const members = Array.isArray(data.memberPatungan) ? data.memberPatungan : [];
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-6"> {/* Main card container */}
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
       {/* Stock Development Overview Section */}
       <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
         <TrendingUp className="w-6 h-6 mr-3 text-purple-600" /> Perkembangan Saham Umum
@@ -68,23 +107,60 @@ const Member = ({ data, getPatunganDatabase }) => {
         <div className="bg-blue-50 p-4 rounded-lg flex flex-col justify-between">
           <p className="text-sm text-blue-700 font-medium">Nilai Saat Ini per Lembar</p>
           <p className="text-xl font-bold text-blue-800 mt-1">
-            Rp {dummyStockData.currentValuePerLot.toLocaleString('id-ID')}
+            Rp {dummyStockOverviewData.currentValuePerLot.toLocaleString('id-ID')}
           </p>
         </div>
         <div className="bg-green-50 p-4 rounded-lg flex flex-col justify-between">
           <p className="text-sm text-green-700 font-medium">Kenaikan</p>
           <p className="text-xl font-bold text-green-800 mt-1">
-            +{dummyStockData.growthPercentage}%
+            +{dummyStockOverviewData.growthPercentage}%
           </p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
-          <p className="text-sm text-gray-600 font-medium">Nilai Awal per Lembar: Rp {dummyStockData.initialValuePerLot.toLocaleString('id-ID')}</p>
-          <p className="text-sm text-gray-600 mt-1">Update Terakhir: {dummyStockData.lastUpdate}</p>
+          <p className="text-sm text-gray-600 font-medium">Nilai Awal per Lembar: Rp {dummyStockOverviewData.initialValuePerLot.toLocaleString('id-ID')}</p>
+          <p className="text-sm text-gray-600 mt-1">Update Terakhir: {dummyStockOverviewData.lastUpdate}</p>
           <p className="text-sm text-gray-500 mt-2 italic">
             *Data ini adalah estimasi perkembangan umum, nilai aktual dapat bervariasi.
           </p>
         </div>
       </div>
+
+      {/* List Perkembangan Proses Saham */}
+      <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
+        <History className="w-6 h-6 mr-3 text-purple-600" /> Riwayat Perkembangan Nilai Saham
+      </h2>
+      {dummyStockProcessList.length === 0 ? (
+        <div className="text-center py-10 text-gray-600 italic">
+          Belum ada riwayat perkembangan nilai saham tersedia.
+        </div>
+      ) : (
+        <div className="space-y-4 mb-8">
+          {dummyStockProcessList.map((entry, index) => (
+            <div key={index} className="flex items-start bg-gray-50 p-4 rounded-lg shadow-sm">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-4"
+                   style={{
+                     backgroundColor: entry.type === 'increase' ? '#dcfce7' : (entry.type === 'decrease' ? '#fee2e2' : '#e0e7ff')
+                   }}>
+                {entry.type === 'increase' && <TrendingUp className="w-5 h-5 text-green-600" />}
+                {entry.type === 'decrease' && <TrendingUp className="w-5 h-5 text-red-600 transform rotate-180" />}
+                {entry.type === 'initial' && <Users className="w-5 h-5 text-blue-600" />}
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-800">{entry.date}</p>
+                <p className="text-gray-600 text-sm mt-1">{entry.description}</p>
+                <p className={`font-bold text-lg mt-1 ${entry.type === 'increase' ? 'text-green-700' : (entry.type === 'decrease' ? 'text-red-700' : 'text-blue-700')}`}>
+                  Rp {entry.value.toLocaleString('id-ID')}
+                  {entry.change !== 0 && (
+                    <span className={`ml-2 text-sm ${entry.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      ({entry.change > 0 ? '+' : ''}{entry.change}%)
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Member List Section */}
       <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
@@ -106,17 +182,23 @@ const Member = ({ data, getPatunganDatabase }) => {
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Anggota</th>
                 <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Lembar Saham</th>
-                {/* Re-introducing optional columns with better styling */}
-                {/* <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Iuran Bulan Ini</th> */}
-                {/* <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Status Pembayaran</th> */}
+                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Harga Saham Saya Saat Ini</th> {/* New Column Header */}
+                {/* Optional Column 1: Iuran Bulan Ini */}
+                {/*
+                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Iuran Bulan Ini</th>
+                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Status Pembayaran</th>
+                */}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100">
               {members.map((item, index) => (
-                <tr key={item.id || index} className="hover:bg-gray-50 transition-colors"> {/* Use item.id if available for better keying */}
+                <tr key={item.id || index} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3 whitespace-nowrap text-center text-sm text-gray-700">{index + 1}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-800 font-medium">{item.name}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-center text-sm text-gray-700">{item.jumlahLot}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-center text-sm font-semibold text-green-700"> {/* New Column Data */}
+                    Rp {(item.jumlahLot * dummyStockOverviewData.currentValuePerLot).toLocaleString('id-ID')}
+                  </td>
                   {/* Optional Column 1: Iuran Bulan Ini */}
                   {/*
                   <td className="px-4 py-3 whitespace-nowrap text-center text-sm">
@@ -138,15 +220,15 @@ const Member = ({ data, getPatunganDatabase }) => {
                       <div className="flex items-center justify-center text-green-600">
                         <CheckCircle className="w-5 h-5 mr-1" /> Disetujui
                       </div>
-                    ) : userData?.role === '2' ? ( // Check if current user is admin (role '2')
+                    ) : userData?.role === '2' ? (
                       <button
                         onClick={() => handleBayar(item)}
-                        className="bg-purple-600 text-white px-3 py-1.5 rounded-md text-xs font-semibold 
+                        className="bg-purple-600 text-white px-3 py-1.5 rounded-md text-xs font-semibold
                                    hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                       >
                         Setujui
                       </button>
-                    ) : ( // For non-admin, if not approved
+                    ) : (
                       <div className="flex items-center justify-center text-yellow-600">
                         <XCircle className="w-5 h-5 mr-1" /> Menunggu
                       </div>
