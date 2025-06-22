@@ -1,87 +1,148 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ImageSlider from '../../component/ImageSlider';
-import MembershipCard from '../../component/Membership';
-import CategorySelector from '../../component/Category';
+import ImageSlider from '../../component/ImageSlider'; // Assume this is already mobile-friendly
+import MembershipCard from '../../component/Membership'; // Assume this is already mobile-friendly
+import CategorySelector from '../../component/Category'; // Assume this is already mobile-friendly
 import { getData } from '../../api/service';
-import PatunganCard from '../../component/PatunganView';
-import ArisanComponent from '../../component/ArisanView';
+import PatunganCard from '../../component/PatunganView'; // Will ensure this is mobile-friendly
+import ArisanComponent from '../../component/ArisanView'; // Will ensure this is mobile-friendly
 
 function HomeScreen() {
   const navigate = useNavigate();
   const [patunganData, setPatunganData] = useState([]);
   const [arisanData, setArisanData] = useState([]);
-
+  const [loadingPatungan, setLoadingPatungan] = useState(true);
+  const [loadingArisan, setLoadingArisan] = useState(true);
+  const [errorPatungan, setErrorPatungan] = useState(null);
+  const [errorArisan, setErrorArisan] = useState(null);
 
   useEffect(() => {
     const getDatabasePatungan = async () => {
+      setLoadingPatungan(true);
+      setErrorPatungan(null);
       try {
-        const res2 = await getData('Patungan');
-        setPatunganData(res2.data);
+        const res = await getData('Patungan'); // Renamed res2 to res for clarity
+        setPatunganData(res.data);
       } catch (error) {
         console.error("Gagal fetch Patungan:", error);
+        setErrorPatungan("Gagal memuat data Patungan.");
+      } finally {
+        setLoadingPatungan(false);
       }
     };
 
     const getDatabaseArisan = async () => {
+      setLoadingArisan(true);
+      setErrorArisan(null);
       try {
-        const res2 = await getData('Arisan');
-        setArisanData(res2.data);
+        const res = await getData('Arisan'); // Renamed res2 to res for clarity
+        setArisanData(res.data);
       } catch (error) {
-        console.error("Gagal fetch Patungan:", error);
+        console.error("Gagal fetch Arisan:", error); // Corrected console error message
+        setErrorArisan("Gagal memuat data Arisan.");
+      } finally {
+        setLoadingArisan(false);
       }
     };
 
     const checkAuth = async () => {
-      const user = await localStorage.getItem('accessTokens');
-      if (!user) {
-        navigate('/LoginScreen');
+      // It's better to get the token directly from localStorage
+      // and check its validity or presence
+      const accessToken = localStorage.getItem('accessTokens');
+      if (!accessToken) {
+        // Use replace: true to prevent going back to login screen with back button
+        navigate('/LoginScreen', { replace: true });
       }
     };
 
     checkAuth();
     getDatabasePatungan();
     getDatabaseArisan();
-  }, [navigate]);
+  }, [navigate]); // Added navigate to dependency array
+
+  // Helper function to render content or messages
+  const renderContent = (data, loading, error, Component, navigatePath) => {
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-24">
+          <p className="text-gray-500">Memuat data...</p> {/* Simple loading indicator */}
+        </div>
+      );
+    }
+    if (error) {
+      return (
+        <div className="flex justify-center items-center h-24">
+          <p className="text-red-500 text-center">{error}</p>
+        </div>
+      );
+    }
+    if (data.length === 0) {
+      return (
+        <div className="flex justify-center items-center h-24">
+          <p className="text-gray-500">Belum ada data tersedia.</p>
+        </div>
+      );
+    }
+    return (
+      <div className="flex overflow-x-auto space-x-4 px-4 pb-4 scrollbar-hide">
+        {data.map((item, idx) => (
+          // Only render if sisaSlot > 0
+          item.sisaSlot > 0 && (
+            <div
+              key={item.id || idx} // Use item.id if available, fallback to idx
+              className="flex-none w-64 md:w-72 cursor-pointer transform transition-transform duration-200 hover:scale-[1.02] active:scale-98"
+              onClick={() => navigate(`${navigatePath}/${item.id}`)}
+            >
+              <Component data={item} />
+            </div>
+          )
+        ))}
+        {/* Add a "Lihat Semua" button if there are many items */}
+        {data.length > 3 && ( // Example: show button if more than 3 items
+          <div className="flex-none w-24 flex items-center justify-center p-2">
+            <button
+              onClick={() => navigate(navigatePath === '/PatunganDetail' ? '/AllPatungan' : '/AllArisan')} // Example path
+              className="flex items-center justify-center h-full w-full bg-gray-100 text-gray-700 rounded-xl shadow-sm hover:bg-gray-200 transition-colors duration-200 text-sm font-medium"
+            >
+              Lihat Semua
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
 
   return (
-    <div className="bg-white">
-      <ImageSlider />
-      <MembershipCard />
-
-      <h2 className="text-xl font-bold text-gray-900 mt-6 ml-3 pl-1">Telusuri Kategori</h2>
-      <CategorySelector />
-
-      <h2 className="text-xl font-bold text-gray-900 mt-6 ml-3 mb-2 pl-1">Promo Patungan</h2>
-      <div className="flex overflow-x-auto space-x-4 pb-4 pl-1 ml-3">
-        {patunganData.map((item, idx) => (
-          <div
-            key={idx}
-            className="flex-none w-72 cursor-pointer"
-            onClick={() => navigate(`/PatunganDetail/${item.id}`)}
-          >
-            {item.sisaSlot > 0 &&
-              <PatunganCard data={item} />
-            }
-          </div>
-        ))}
+    <div className="bg-white min-h-screen pb-16 font-sans antialiased">
+      {/* Top Section */}
+      <div className="p-4 bg-gradient-to-b from-yellow-50 to-white">
+        <ImageSlider />
+        <MembershipCard />
       </div>
-      <h2 className="text-xl font-bold text-gray-900 mt-6 ml-3 mb-2 pl-1">Promo Arisan</h2>
-      <div className="flex overflow-x-auto space-x-4 pb-4 pl-1 ml-3">
-        {arisanData
-          .map((item, idx) =>
-            <div
-              key={idx}
-              className="flex-none w-50"
-              onClick={() => navigate(`/ArisanDetail/${item.id}`)}
-            >
-              {item.sisaSlot > 0 &&
-                <ArisanComponent data={item} />
-              }
-            </div>
-          )}
+
+      {/* Category Selector Section */}
+      <div className="mt-3">
+        <h2 className="ml-4 text-xl font-bold text-gray-800 mb-2">Telusuri Kategori</h2>
+        <CategorySelector />
       </div>
-      <h2 className="text-sm text-center text-gray-900 m-10 pl-1">PT PATUNGAN PROPERTI INTERNASIONAL</h2>
+
+      {/* Promo Patungan Section */}
+      <div className="mt-8">
+        <h2 className="text-xl font-bold text-gray-800 px-4 mb-4">Promo Patungan</h2>
+        {renderContent(patunganData, loadingPatungan, errorPatungan, PatunganCard, '/PatunganDetail')}
+      </div>
+
+      {/* Promo Arisan Section */}
+      <div className="mt-8">
+        <h2 className="text-xl font-bold text-gray-800 px-4 mb-4">Promo Arisan</h2>
+        {renderContent(arisanData, loadingArisan, errorArisan, ArisanComponent, '/ArisanDetail')}
+      </div>
+
+      {/* Footer Branding */}
+      <div className="mt-12 text-center text-xs text-gray-400">
+        <p>© 2025 PT PATUNGAN PROPERTI INTERNASIONAL</p>
+      </div>
     </div>
   );
 }
