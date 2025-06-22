@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import BackButton from '../../component/BackButton';
-import { X } from 'lucide-react';
+import BackButton from '../../component/BackButton'; // Pastikan path ini benar
+import { X } from 'lucide-react'; // Icon untuk tombol close modal
 
+// Objek untuk menentukan warna badge berdasarkan tipe materi
 const badgeColor = {
-    video: 'bg-red-500',
-    pdf: 'bg-blue-500',
-    text: 'bg-green-500',
+    video: 'bg-red-600', // Lebih gelap, lebih solid
+    pdf: 'bg-blue-600',  // Lebih gelap, lebih solid
+    text: 'bg-green-600', // Lebih gelap, lebih solid
 };
 
+// Data edukasi Anda
 const edukasiData = [
     {
         id: '1',
         title: 'STRATEGI PERCEPATAN BISNIS',
         type: 'text',
-        thumbnail: 'https://beres-backend-609517395039.asia-southeast2.run.app/api/v1/file/review/68444f1920182a2f163e0c1e',
+        thumbnail: 'https://apiberes.coderchamps.co.id/api/v1/file/review/6852eda6692de1f78365b8de',
         sourceBy: 'By Dudi Suparhadi',
         source: `
 1️⃣
@@ -69,15 +71,15 @@ STRATEGI MUSTIKA ESTATE
         id: '2',
         title: 'Investasi Rumah Tanpa Modal',
         type: 'video',
-        thumbnail: 'https://img.youtube.com/vi/75LvJLlCJnY/0.jpg',
+        thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg', // Contoh thumbnail YouTube
         sourceBy: 'By Kasisolusi',
-        source: 'https://www.youtube.com/watch?v=75LvJLlCJnY&t=57s',
+        source: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=57s', // Contoh URL YouTube
     },
     {
         id: '3',
         title: 'Yuk Mengenal BERES',
         type: 'text',
-        thumbnail: 'https://beres-backend-609517395039.asia-southeast2.run.app/api/v1/file/review/684024254b09c325fbb56513',
+        thumbnail: 'https://apiberes.coderchamps.co.id/api/v1/file/review/6852ed9e692de1f78365b8dc',
         sourceBy: 'By Dudi Suparhadi',
         source: `
 Bukan hanya sekedar kata,tapi juga Jargon,Semangat dan Doa,yg akan membuat sesuatu dari yg tidak beres menjadi BERES
@@ -113,7 +115,7 @@ Ciputat,Indonesia 17-8-2024
         id: '4',
         title: '3 GRAND DESIGN BERES',
         type: 'text',
-        thumbnail: 'https://beres-backend-609517395039.asia-southeast2.run.app/api/v1/file/review/684028f14b09c325fbb56519',
+        thumbnail: 'https://apiberes.coderchamps.co.id/api/v1/file/review/6852eda6692de1f78365b8de',
         sourceBy: 'By Dudi Suparhadi',
         source: `3 GRAND DESIGN BERES
 1️⃣ MODAL :
@@ -167,84 +169,107 @@ const EdukasiScreen = () => {
 
     const closeModal = () => setSelectedItem(null);
 
+    // Fungsi untuk mendapatkan URL embed YouTube yang benar
     function getYouTubeEmbedUrl(url) {
         try {
             const urlObj = new URL(url);
-            if (urlObj.hostname.includes('youtube.com')) {
-                const videoId = urlObj.searchParams.get('v');
-                const t = urlObj.searchParams.get('t'); // misal: "57s"
-                let start = 0;
+            let videoId = '';
+            let startTime = '';
+
+            // Handle standard YouTube watch URLs
+            if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('www.youtube.com')) {
+                videoId = urlObj.searchParams.get('v');
+                const t = urlObj.searchParams.get('t');
                 if (t) {
-                    // konversi t "57s" jadi angka 57
-                    start = parseInt(t.replace('s', '')) || 0;
+                    startTime = `?start=${parseInt(t.replace('s', '')) || 0}`;
                 }
-                return `https://www.youtube.com/embed/${videoId}?start=${start}`;
-            } else if (urlObj.hostname === 'youtu.be') {
-                // short url youtube
-                const videoId = urlObj.pathname.slice(1);
-                return `https://www.youtube.com/embed/${videoId}`;
             }
-            return url; // fallback
-        } catch {
-            return url; // fallback
+            // Handle youtu.be short URLs
+            else if (urlObj.hostname.includes('youtu.be')) {
+                videoId = urlObj.pathname.slice(1);
+            }
+
+            if (videoId) {
+                return `https://www.youtube.com/embed/${videoId}${startTime}`;
+            }
+            return url; // Fallback jika tidak dikenali
+        } catch (error) {
+            console.error("Error parsing YouTube URL:", error);
+            return url; // Fallback jika terjadi error parsing
         }
     }
 
-
     return (
-        <div className="min-h-screen bg-white p-4">
+        <div className="min-h-screen bg-gray-50 pb-8"> {/* Latar belakang abu-abu muda */}
             <BackButton title={'Materi Edukasi'} />
 
-            {/* Grid */}
-            <div className="grid md:grid-cols-1 gap-6">
+            {/* Grid Materi Edukasi */}
+            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {edukasiData.map((item) => (
                     <button
                         key={item.id}
                         onClick={() => setSelectedItem(item)}
-                        className="relative rounded-lg overflow-hidden shadow hover:shadow-lg transition text-left"
+                        className="relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     >
-                        <img
-                            src={item.thumbnail}
-                            alt={item.title}
-                            className="w-full h-48 object-cover"
-                        />
-                        <div
-                            className={`absolute top-2 left-2 px-3 py-1 text-sm text-white rounded-full font-semibold capitalize shadow-md ${badgeColor[item.type]}`}
-                        >
-                            {item.type}
+                        {/* Thumbnail */}
+                        <div className="w-full h-48 overflow-hidden">
+                            <img
+                                src={item.thumbnail}
+                                alt={item.title}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
                         </div>
-                        <div className="p-4 bg-white">
-                            <h2 className="font-semibold text-green-900">{item.title}</h2>
-                            <h1 className="text-sm text-gray-900">{item.sourceBy}</h1>
 
+                        {/* Badge Tipe Materi */}
+                        <div
+                            className={`absolute top-3 left-3 px-3 py-1 text-xs text-white rounded-full font-bold capitalize shadow-md ${badgeColor[item.type]} flex items-center space-x-1`}
+                        >
+                            {/* Tambahkan icon kecil di samping teks badge (opsional) */}
+                            {item.type === 'video' && <span className="text-white">▶️</span>}
+                            {item.type === 'pdf' && <span className="text-white">📄</span>}
+                            {item.type === 'text' && <span className="text-white">📝</span>}
+                            <span>{item.type}</span>
+                        </div>
+
+                        {/* Konten Kartu */}
+                        <div className="p-4 bg-white flex flex-col justify-between h-auto">
+                            <h2 className="font-bold text-lg text-gray-800 mb-1 line-clamp-2 leading-snug">
+                                {item.title}
+                            </h2>
+                            <p className="text-sm text-gray-600 font-medium">{item.sourceBy}</p>
                         </div>
                     </button>
                 ))}
             </div>
 
-            {/* Modal */}
+            {/* Modal Detail Materi */}
             {selectedItem && (
-                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full relative max-h-[90vh] overflow-y-auto">
-                        {/* Header */}
-                        <div className="flex justify-between items-center p-4 border-b">
-                            <h3 className="text-lg font-semibold text-green-900">
+                <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full relative max-h-[95vh] overflow-hidden flex flex-col animate-scale-in">
+                        {/* Header Modal */}
+                        <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gray-50">
+                            <h3 className="text-xl font-bold text-gray-800 flex-1 pr-4">
                                 {selectedItem.title}
                             </h3>
-                            <button onClick={closeModal}>
-                                <X className="w-6 h-6 text-gray-600 hover:text-red-500" />
+                            <button
+                                onClick={closeModal}
+                                className="p-2 rounded-full hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-400"
+                                aria-label="Tutup"
+                            >
+                                <X className="w-6 h-6 text-gray-600" />
                             </button>
                         </div>
 
-                        {/* Content */}
-                        <div className="p-4">
+                        {/* Konten Modal */}
+                        <div className="p-4 flex-1 overflow-y-auto"> {/* Konten bisa discroll */}
                             {selectedItem.type === 'video' && (
-                                <div className="aspect-video">
+                                <div className="aspect-video w-full rounded-lg overflow-hidden shadow-lg mb-4">
                                     <iframe
-                                        className="w-full h-full rounded-md"
+                                        className="w-full h-full"
                                         src={getYouTubeEmbedUrl(selectedItem.source)}
                                         title={selectedItem.title}
                                         frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen
                                     ></iframe>
                                 </div>
@@ -253,16 +278,22 @@ const EdukasiScreen = () => {
                             {selectedItem.type === 'pdf' && (
                                 <iframe
                                     src={selectedItem.source}
-                                    className="w-full h-[70vh] border rounded-md"
+                                    className="w-full h-[70vh] border border-gray-300 rounded-lg shadow-md"
                                     title={selectedItem.title}
                                 ></iframe>
                             )}
 
                             {selectedItem.type === 'text' && (
-                                <div className="prose max-w-none text-gray-700">
-                                    <pre className="whitespace-pre-wrap">{selectedItem.source}</pre>
+                                <div className="prose max-w-none text-gray-800 leading-relaxed text-base">
+                                    <pre className="whitespace-pre-wrap font-sans text-sm md:text-base bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-inner">
+                                        {selectedItem.source}
+                                    </pre>
                                 </div>
                             )}
+                            {/* Detail Sumber */}
+                            <p className="text-sm text-gray-500 mt-4 text-right">
+                                Sumber: <span className="font-semibold text-gray-700">{selectedItem.sourceBy}</span>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ import CategorySelector from '../../component/Category'; // Assume this is alrea
 import { getData } from '../../api/service';
 import PatunganCard from '../../component/PatunganView'; // Will ensure this is mobile-friendly
 import ArisanComponent from '../../component/ArisanView'; // Will ensure this is mobile-friendly
+import AppHeader from '../../component/Header';
 
 function HomeScreen() {
   const navigate = useNavigate();
@@ -116,6 +117,7 @@ function HomeScreen() {
   return (
     <div className="bg-white min-h-screen pb-16 font-sans antialiased">
       {/* Top Section */}
+      {/* <AppHeader /> */}
       <div className="p-4 bg-gradient-to-b from-yellow-50 to-white">
         <ImageSlider />
         <MembershipCard />
