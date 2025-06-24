@@ -50,7 +50,7 @@ const RegisterScreen = ({ navigateToHome }) => {
       }
     } catch (err) {
       // Improved error handling for the alert message
-      const errorMessage = err?.response?.data?.message || err?.message || "Terjadi kesalahan saat pendaftaran.";
+      const errorMessage = err?.response?.data?.message || err || "Terjadi kesalahan saat pendaftaran.";
       alert(errorMessage);
     } finally {
       setLoading(false);

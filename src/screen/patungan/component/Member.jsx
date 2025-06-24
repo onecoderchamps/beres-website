@@ -57,40 +57,40 @@ const Member = ({ data, getPatunganDatabase }) => {
   // You will need to replace this with actual historical data fetched from your API
   const dummyStockProcessList = [
     {
-      date: new Date(2025, 0, 15).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      date: new Date(2025, 5, 24).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
       value: data.targetPay,
       change: 0,
       description: 'Nilai awal per lembar saham Patungan.',
       type: 'initial'
     },
-    {
-      date: new Date(2025, 1, 20).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-      value: data.targetPay * 1.02,
-      change: 2,
-      description: 'Kenaikan nilai saham setelah update pertama.',
-      type: 'increase'
-    },
-    {
-      date: new Date(2025, 3, 5).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-      value: data.targetPay * 1.05,
-      change: 3,
-      description: 'Kenaikan signifikan seiring progress proyek.',
-      type: 'increase'
-    },
-    {
-      date: new Date(2025, 4, 10).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-      value: data.targetPay * 1.04,
-      change: -1,
-      description: 'Penurunan nilai sementara akibat fluktuasi pasar.',
-      type: 'decrease'
-    },
-    {
-      date: new Date(2025, 5, 22).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-      value: data.targetPay * 1.05,
-      change: 1,
-      description: 'Nilai kembali stabil setelah penyesuaian pasar.',
-      type: 'increase'
-    },
+    // {
+    //   date: new Date(2025, 1, 20).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+    //   value: data.targetPay * 1.02,
+    //   change: 2,
+    //   description: 'Kenaikan nilai saham setelah update pertama.',
+    //   type: 'increase'
+    // },
+    // {
+    //   date: new Date(2025, 3, 5).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+    //   value: data.targetPay * 1.05,
+    //   change: 3,
+    //   description: 'Kenaikan signifikan seiring progress proyek.',
+    //   type: 'increase'
+    // },
+    // {
+    //   date: new Date(2025, 4, 10).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+    //   value: data.targetPay * 1.04,
+    //   change: -1,
+    //   description: 'Penurunan nilai sementara akibat fluktuasi pasar.',
+    //   type: 'decrease'
+    // },
+    // {
+    //   date: new Date(2025, 5, 22).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+    //   value: data.targetPay * 1.05,
+    //   change: 1,
+    //   description: 'Nilai kembali stabil setelah penyesuaian pasar.',
+    //   type: 'increase'
+    // },
   ];
   // --- END DUMMY DATA ---
 
