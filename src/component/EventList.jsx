@@ -1,5 +1,5 @@
 // src/component/EventsSection.jsx
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getData, postData } from '../api/service'; // Pastikan path benar
 
 const EventsSection = () => {
@@ -10,13 +10,19 @@ const EventsSection = () => {
   const [showJoinConfirmation, setShowJoinConfirmation] = useState(false); // Untuk konfirmasi gabung
   const [processingJoin, setProcessingJoin] = useState(false); // Untuk loading state saat gabung
 
+  const scrollContainerRef = useRef(null); // Ref untuk container scroll
+
   const fetchEvents = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await getData('event'); // Endpoint event
       if (res && res.data && Array.isArray(res.data)) {
-        setEvents(res.data);
+        // Filter events that are not in the past
+        const futureEvents = res.data.filter(event => new Date(event.dueDate) >= new Date());
+        // Sort by dueDate to show upcoming events first
+        futureEvents.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+        setEvents(futureEvents);
       } else {
         setEvents([]);
         setError('Data event tidak ditemukan atau format tidak sesuai.');
@@ -32,6 +38,46 @@ const EventsSection = () => {
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
+
+  // --- Countdown Logic ---
+  const calculateTimeLeft = useCallback((dueDate) => {
+    const difference = +new Date(dueDate) - +new Date();
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    }
+    return timeLeft;
+  }, []);
+
+  const [timeRemaining, setTimeRemaining] = useState({});
+
+  useEffect(() => {
+    const timers = events.map(event => {
+      const interval = setInterval(() => {
+        setTimeRemaining(prev => ({
+          ...prev,
+          [event.id]: calculateTimeLeft(event.dueDate)
+        }));
+      }, 1000);
+      return interval;
+    });
+
+    // Initial calculation
+    events.forEach(event => {
+      setTimeRemaining(prev => ({
+        ...prev,
+        [event.id]: calculateTimeLeft(event.dueDate)
+      }));
+    });
+
+    return () => timers.forEach(interval => clearInterval(interval));
+  }, [events, calculateTimeLeft]);
 
   // --- Helper Functions for Formatting ---
   const formatPrice = (price) => {
@@ -69,19 +115,23 @@ const EventsSection = () => {
     if (!selectedEvent) return;
 
     setProcessingJoin(true);
-    // TODO: Implement actual API call to transfer balance for the event
     try {
-      // Simulate API call for saldo transfer
-    //   await new Promise(resolve => setTimeout(resolve, 1500));
-    const formData = {
+      const formData = {
         idEvent: selectedEvent.id,
-    }
-    const res = await postData('Transaksi/Event', formData);
+      };
+      const res = await postData('Transaksi/Event', formData); // Asumsi postData mengembalikan respons yang bisa di-check
+      if (res && res.code === 200) { // Asumsi sukses jika code 200
+        alert(`Berhasil gabung event "${selectedEvent.name}"!`);
+      } else {
+        // Handle specific error messages from API if available
+        alert(`Gagal gabung event: ${res || 'Terjadi kesalahan tidak dikenal.'}`);
+      }
       setShowJoinConfirmation(false);
       setSelectedEvent(null);
+      fetchEvents(); // Refresh event list in case the event state changed (e.g., full)
     } catch (error) {
       console.error("Error joining event:", error);
-      alert("Gagal gabung event. Silakan coba lagi."+ error);
+      alert("Gagal gabung event: " + (error.response?.data?.message || error || "Terjadi kesalahan koneksi."));
     } finally {
       setProcessingJoin(false);
     }
@@ -117,34 +167,55 @@ const EventsSection = () => {
   // --- JSX for Event List ---
   return (
     <>
-      <div className="flex overflow-x-auto space-x-4 px-4 pb-4 scrollbar-hide">
-        {events.map((event) => (
-          <div
-            key={event.id}
-            className="flex-none cursor-pointer transform transition-transform duration-200 hover:scale-[1.02] active:scale-98"
-            onClick={() => handleCardClick(event)}
-          >
-            {/* EventCard JSX (inline) */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden min-w-[200px] w-[200px] hover:shadow-lg transition-shadow duration-200">
-              <img
-                src={event.image}
-                alt={event.name}
-                className="w-full h-32 object-cover"
-              />
-              <div className="p-3">
-                <h3 className="font-semibold text-gray-800 text-sm truncate mb-1">
-                  {event.name}
-                </h3>
-                <p className="text-xs text-gray-600 mb-2">
-                  <span className="font-medium">📅</span> {formatDate(event.dueDate)}
-                </p>
-                <p className="text-sm font-bold text-purple-600">
-                  {formatPrice(event.price)}
-                </p>
+      <div
+        ref={scrollContainerRef}
+        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 scrollbar-hide"
+      >
+        {events.map((event) => {
+          const timeLeft = timeRemaining[event.id] || {};
+          const isEventOver = !(timeLeft.days || timeLeft.hours || timeLeft.minutes || timeLeft.seconds);
+
+          if (isEventOver) return null; // Don't render event if time is up
+
+          return (
+            <div
+              key={event.id}
+              // Tambahkan `w-full flex-shrink-0` untuk setiap item carousel
+              // `snap-center` untuk snapping
+              className="w-full flex-shrink-0 snap-center px-4 md:px-0 md:w-1/2 lg:w-1/3 xl:w-1/4
+                         cursor-pointer transform transition-transform duration-200 hover:scale-[1.01] active:scale-98"
+              onClick={() => handleCardClick(event)}
+            >
+              {/* EventCard JSX (inline) */}
+              <div className="bg-white rounded-lg shadow-md overflow-hidden w-full mx-auto hover:shadow-lg transition-shadow duration-200">
+                <img
+                  src={event.image}
+                  alt={event.name}
+                  className="w-full h-40 object-cover" // Ubah tinggi gambar agar lebih proporsional
+                />
+                <div className="p-3">
+                  <h3 className="font-semibold text-gray-800 text-base truncate mb-1">
+                    {event.name}
+                  </h3>
+                  <p className="text-xs text-gray-600 mb-1">
+                    <span className="font-medium">📅</span> {formatDate(event.dueDate)}
+                  </p>
+                  <p className="text-sm font-bold text-purple-600 mb-2">
+                    {formatPrice(event.price)}
+                  </p>
+                  {/* Countdown Timer */}
+                  <div className="text-sm font-semibold text-center text-red-600 bg-red-50 p-2 rounded-md">
+                    {Object.keys(timeLeft).length > 0 ? (
+                      `Waktu Tersisa: ${timeLeft.days || '0'} Hari ${timeLeft.hours || '0'} Jam ${timeLeft.minutes || '0'} Menit ${timeLeft.seconds || '0'} Detik`
+                    ) : (
+                      'Event Telah Berakhir!'
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* --- Event Detail Modal JSX (Conditional Render) --- */}
