@@ -2,8 +2,9 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getData, postData } from '../api/service'; // Pastikan path benar
 
-const EventsSection = () => {
-  const [events, setEvents] = useState([]);
+const EventsSection = ({events}) => {
+  // const [events, setEvents] = useState([]);
+  console.log("EventsSection events:", events);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null); // Untuk menampilkan detail event
@@ -22,9 +23,9 @@ const EventsSection = () => {
         const futureEvents = res.data.filter(event => new Date(event.dueDate) >= new Date());
         // Sort by dueDate to show upcoming events first
         futureEvents.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-        setEvents(futureEvents);
+        // setEvents(futureEvents);
       } else {
-        setEvents([]);
+        // setEvents([]);
         setError('Data event tidak ditemukan atau format tidak sesuai.');
       }
     } catch (err) {

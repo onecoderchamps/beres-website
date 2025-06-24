@@ -65,11 +65,28 @@ function HomeScreen() {
     }
   }, [navigate]);
 
+  const [events, setEvents] = useState([]);
+
+
+  const fetchEvents = useCallback(async () => {
+    try {
+      const res = await getData('event'); // Endpoint event
+      // Filter events that are not in the past
+      const futureEvents = res.data.filter(event => new Date(event.dueDate) >= new Date());
+      // Sort by dueDate to show upcoming events first
+      futureEvents.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+      setEvents(futureEvents);
+    } catch (err) {
+      alert('Gagal memuat data event. Silakan coba lagi nanti.');
+    }
+  }, []);
+
   useEffect(() => {
+    fetchEvents();
     checkAuth();
     getDatabasePatungan();
     getDatabaseArisan();
-  }, [checkAuth, getDatabasePatungan, getDatabaseArisan]); // Added all useCallback dependencies
+  }, [checkAuth, getDatabasePatungan, getDatabaseArisan,fetchEvents]); // Added all useCallback dependencies
 
   // Helper function to render content or messages
   const renderContent = (data, loading, error, Component, navigatePath) => {
@@ -145,10 +162,12 @@ function HomeScreen() {
       </div>
 
       {/* New: Upcoming Events Section */}
-      <div className="mt-8">
-        <h2 className="text-xl font-bold text-gray-800 px-4 mb-4">Event Mendatang</h2>
-        <EventList /> {/* <-- Use the new EventList component here */}
-      </div>
+      {events.length > 0 &&
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-800 px-4 mb-4">Event Mendatang</h2>
+          <EventList events={events} /> {/* <-- Use the new EventList component here */}
+        </div>
+      }
 
       {/* Promo Patungan Section */}
       <div className="mt-8">
