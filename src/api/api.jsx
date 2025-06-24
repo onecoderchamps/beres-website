@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Base URL API
-const API_URL = 'https://apiberes.coderchamps.co.id/api/v1/';
-// const API_URL = 'http://localhost:5214/api/v1/';
+// const API_URL = 'https://apiberes.coderchamps.co.id/api/v1/';
+const API_URL = 'http://localhost:5000/api/v1/';
 
 const api = axios.create({
   baseURL: API_URL,

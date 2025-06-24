@@ -95,8 +95,8 @@ const MembershipCard = () => {
         balance: parseFloat(nominal),
       };
       // Simulate API call for transfer
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      // await postData('user/Transfer', formData); // Use this in production
+      // await new Promise(resolve => setTimeout(resolve, 1500));
+      await postData('user/Transfer', formData); // Use this in production
 
       setTransferSuccess(true);
       // Optionally, fetch balance again after successful transfer
@@ -106,7 +106,7 @@ const MembershipCard = () => {
       setTimeout(() => setShowModal(false), 2000); // Close modal after 2 seconds on success
     } catch (error) {
       console.error("Transfer error:", error);
-      setModalError(error.response?.data?.message || "Terjadi kesalahan saat transfer.");
+      setModalError(error || "Terjadi kesalahan saat transfer.");
     } finally {
       setModalLoading(false);
     }
