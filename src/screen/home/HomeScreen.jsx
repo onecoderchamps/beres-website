@@ -148,7 +148,6 @@ function HomeScreen() {
 
   return (
     <div className="bg-white min-h-screen pb-16 font-sans antialiased">
-      <AppHeader /> {/* Moved AppHeader here, assuming it's part of the fixed layout */}
       {/* Top Section */}
       <div className="p-4 bg-gradient-to-b from-yellow-50 to-white">
         <ImageSlider />

@@ -1,15 +1,19 @@
-// src/component/EventsSection.jsx
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getData, postData } from '../api/service'; // Pastikan path benar
+import JsBarcode from 'jsbarcode'; // Import JsBarcode
 
-const EventsSection = ({events}) => {
-  // const [events, setEvents] = useState([]);
-  console.log("EventsSection events:", events);
+const EventsSection = ({ events }) => {
+  // const [events, setEvents] = useState([]); // Baris ini dikomentari karena events diterima sebagai prop
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null); // Untuk menampilkan detail event
+  const [buttonEvent, setButtonEvent] = useState(false); // Untuk menampilkan detail event (nama variabel diubah ke camelCase)
+
   const [showJoinConfirmation, setShowJoinConfirmation] = useState(false); // Untuk konfirmasi gabung
   const [processingJoin, setProcessingJoin] = useState(false); // Untuk loading state saat gabung
+
+  const [showBarcodeModal, setShowBarcodeModal] = useState(false); // State baru untuk modal barcode
+  const barcodeRef = useRef(null); // Ref untuk elemen SVG barcode
 
   const scrollContainerRef = useRef(null); // Ref untuk container scroll
 
@@ -23,9 +27,9 @@ const EventsSection = ({events}) => {
         const futureEvents = res.data.filter(event => new Date(event.dueDate) >= new Date());
         // Sort by dueDate to show upcoming events first
         futureEvents.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-        // setEvents(futureEvents);
+        // setEvents(futureEvents); // Baris ini dikomentari karena events diterima sebagai prop
       } else {
-        // setEvents([]);
+        // setEvents([]); // Baris ini dikomentari
         setError('Data event tidak ditemukan atau format tidak sesuai.');
       }
     } catch (err) {
@@ -59,25 +63,29 @@ const EventsSection = ({events}) => {
   const [timeRemaining, setTimeRemaining] = useState({});
 
   useEffect(() => {
-    const timers = events.map(event => {
-      const interval = setInterval(() => {
+    // Pastikan `events` ada dan bukan array kosong sebelum memulai timer
+    if (events && events.length > 0) {
+      const timers = events.map(event => {
+        const interval = setInterval(() => {
+          setTimeRemaining(prev => ({
+            ...prev,
+            [event.id]: calculateTimeLeft(event.dueDate)
+          }));
+        }, 1000);
+        return interval;
+      });
+
+      // Initial calculation for all events
+      events.forEach(event => {
         setTimeRemaining(prev => ({
           ...prev,
           [event.id]: calculateTimeLeft(event.dueDate)
         }));
-      }, 1000);
-      return interval;
-    });
+      });
 
-    // Initial calculation
-    events.forEach(event => {
-      setTimeRemaining(prev => ({
-        ...prev,
-        [event.id]: calculateTimeLeft(event.dueDate)
-      }));
-    });
-
-    return () => timers.forEach(interval => clearInterval(interval));
+      // Cleanup function for intervals
+      return () => timers.forEach(interval => clearInterval(interval));
+    }
   }, [events, calculateTimeLeft]);
 
   // --- Helper Functions for Formatting ---
@@ -96,12 +104,26 @@ const EventsSection = ({events}) => {
   };
 
   // --- Handlers ---
-  const handleCardClick = (event) => {
+  const handleCardClick = async (event) => {
     setSelectedEvent(event);
+    const res = await getData('Event/' + event.id);
+    if (res) {
+      if (res.data === null) { // Asumsi ada field `isJoined`
+        setButtonEvent(true); // Jika sudah bergabung, tampilkan tombol barcode
+      } else {
+        setButtonEvent(false); // Jika belum, tampilkan tombol gabung
+      }
+      setSelectedEvent(event); // Update selectedEvent dengan data detail
+    } else {
+      console.error("Error fetching event details:", res);
+      setButtonEvent(true); // Default ke tombol gabung jika gagal fetch
+    }
   };
 
   const handleCloseDetail = () => {
     setSelectedEvent(null);
+    setShowJoinConfirmation(false); // Pastikan modal konfirmasi tertutup
+    setShowBarcodeModal(false); // Pastikan modal barcode tertutup saat detail ditutup
   };
 
   const handleJoinClick = () => {
@@ -123,20 +145,46 @@ const EventsSection = ({events}) => {
       const res = await postData('Transaksi/Event', formData); // Asumsi postData mengembalikan respons yang bisa di-check
       if (res && res.code === 200) { // Asumsi sukses jika code 200
         alert(`Berhasil gabung event "${selectedEvent.name}"!`);
+        setShowJoinConfirmation(false);
+        // Setelah berhasil gabung, perbarui status untuk menampilkan tombol barcode
+        setButtonEvent(false); // Mengatur ke false akan menampilkan tombol "Tampilkan Barcode"
+        // Tidak perlu setSelectedEvent(null) agar modal detail tetap terbuka dan barcode bisa langsung ditampilkan
+        fetchEvents(); // Refresh event list in case the event state changed (e.g., full)
       } else {
         // Handle specific error messages from API if available
-        alert(`Gagal gabung event: ${res || 'Terjadi kesalahan tidak dikenal.'}`);
+        alert(`Gagal gabung event: ${res.message || 'Terjadi kesalahan tidak dikenal.'}`);
       }
-      setShowJoinConfirmation(false);
-      setSelectedEvent(null);
-      fetchEvents(); // Refresh event list in case the event state changed (e.g., full)
     } catch (error) {
-      console.error("Error joining event:", error);
-      alert("Gagal gabung event: " + (error.response?.data?.message || error || "Terjadi kesalahan koneksi."));
+      alert("Gagal gabung event: " + (error || "Terjadi kesalahan koneksi."));
     } finally {
       setProcessingJoin(false);
     }
   };
+
+  const handleShowBarcode = () => {
+    if (selectedEvent && selectedEvent.id) {
+      setShowBarcodeModal(true);
+    }
+  };
+
+  // --- useEffect untuk Generate Barcode ---
+  useEffect(() => {
+    if (showBarcodeModal && barcodeRef.current && selectedEvent && selectedEvent.id) {
+      try {
+        JsBarcode(barcodeRef.current, String(selectedEvent.id), { // Pastikan ID adalah string
+          format: "CODE128", // Atau format lain seperti "CODE39", "EAN13"
+          lineColor: "#000",
+          width: 2,
+          height: 100,
+          displayValue: true,
+          textMargin: 5,
+          fontSize: 18,
+        });
+      } catch (err) {
+        console.error("Error generating barcode:", err);
+      }
+    }
+  }, [showBarcodeModal, selectedEvent]); // Barcode akan digenerate ulang jika modal terlihat atau selectedEvent berubah
 
   // --- Render Logic ---
 
@@ -157,7 +205,8 @@ const EventsSection = ({events}) => {
     );
   }
 
-  if (events.length === 0) {
+  // Menggunakan prop 'events' secara langsung
+  if (!events || events.length === 0) {
     return (
       <div className="flex justify-center items-center py-6">
         <p className="text-gray-500">Belum ada event tersedia saat ini.</p>
@@ -272,12 +321,22 @@ const EventsSection = ({events}) => {
                 >
                   Tutup
                 </button>
-                <button
-                  onClick={handleJoinClick}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg shadow-md hover:from-purple-700 hover:to-indigo-700 transition duration-300 transform hover:scale-105 font-semibold"
-                >
-                  Gabung Event
-                </button>
+                {/* Logika kondisional untuk menampilkan tombol "Gabung Event" atau "Tampilkan Barcode" */}
+                {buttonEvent ? ( // buttonEvent true berarti belum gabung (tampilkan "Gabung Event")
+                  <button
+                    onClick={handleJoinClick}
+                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-md hover:from-green-600 hover:to-emerald-700 transition duration-300 transform hover:scale-105 font-semibold"
+                  >
+                    Gabung Event
+                  </button>
+                ) : ( // buttonEvent false berarti sudah gabung (tampilkan "Tampilkan Barcode")
+                  <button
+                    onClick={handleShowBarcode}
+                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg shadow-md hover:from-purple-700 hover:to-indigo-700 transition duration-300 transform hover:scale-105 font-semibold"
+                  >
+                    Tampilkan Barcode
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -322,6 +381,28 @@ const EventsSection = ({events}) => {
                   )}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- Barcode Modal JSX (Conditional Render) --- */}
+      {selectedEvent && showBarcodeModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm text-center transform scale-95 animate-scale-in">
+            <div className="p-8">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Barcode Event</h3>
+              <p className="mb-4 text-gray-700">Scan barcode ini untuk masuk event:</p>
+              <div className="flex justify-center mb-6">
+                {/* SVG element tempat barcode akan digambar */}
+                <svg ref={barcodeRef} className="max-w-full h-auto"></svg>
+              </div>
+              <button
+                onClick={() => setShowBarcodeModal(false)}
+                className="mt-6 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition duration-200 font-semibold"
+              >
+                Tutup Barcode
+              </button>
             </div>
           </div>
         </div>
