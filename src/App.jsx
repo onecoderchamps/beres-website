@@ -16,6 +16,7 @@ import AktifitasPage from "./screen/home/MyAssetScreen";
 import AkunPage from "./screen/home/MyProfileScreen";
 import EdukasiScreen from "./screen/home/EdukasiScreen";
 import PPOBScreen from "./screen/ppob/PpobScreen";
+import MaintenancePage from "./screen/Maintenance";
 
 
 function App() {
@@ -35,12 +36,15 @@ function App() {
         <Route path="/KoperasiScreen" element={<KoperasiScreen />} />
         <Route path="/PatunganScreen" element={<PatunganScreen />} />
         <Route path="/PatunganDetail/:id" element={<PatunganDetail />} />
-
         <Route path="/ArisanScreen" element={<ArisanScreen />} />
         <Route path="/ArisanDetail/:id" element={<ArisanDetail />} />
         <Route path="/SedekahScreen" element={<SedekahScreen />} />
         <Route path="/PPOBScreen" element={<PPOBScreen />} />
-
+        {/* --- Rute Catch-All untuk Mengalihkan Jika Tidak Ada Yang Cocok --- */}
+        {/* Ini harus menjadi Route terakhir di dalam <Routes> */}
+        {/* <Route path="*" element={<MaintenancePage />} /> */}
+        {/* Jika Anda ingin halaman 404 yang spesifik, gunakan: */}
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
     </BrowserRouter>
   );
