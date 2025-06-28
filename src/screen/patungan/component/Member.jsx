@@ -47,9 +47,9 @@ const Member = ({ data, getPatunganDatabase }) => {
 
   // Dummy data for stock development overview (replace with actual data if available)
   const dummyStockOverviewData = {
-    currentValuePerLot: data.targetPay * 1.05, // Example: 5% increase from targetPay
+    currentValuePerLot: data.targetPay * (1 + (parseFloat(data.kenaikan) / 100)), // Example: 5% increase from targetPay
     initialValuePerLot: data.targetPay,
-    growthPercentage: 5, // Example growth
+    growthPercentage: parseInt(data.kenaikan), // Example growth
     lastUpdate: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
   };
 
@@ -63,34 +63,6 @@ const Member = ({ data, getPatunganDatabase }) => {
       description: 'Nilai awal per lembar saham Patungan.',
       type: 'initial'
     },
-    // {
-    //   date: new Date(2025, 1, 20).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-    //   value: data.targetPay * 1.02,
-    //   change: 2,
-    //   description: 'Kenaikan nilai saham setelah update pertama.',
-    //   type: 'increase'
-    // },
-    // {
-    //   date: new Date(2025, 3, 5).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-    //   value: data.targetPay * 1.05,
-    //   change: 3,
-    //   description: 'Kenaikan signifikan seiring progress proyek.',
-    //   type: 'increase'
-    // },
-    // {
-    //   date: new Date(2025, 4, 10).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-    //   value: data.targetPay * 1.04,
-    //   change: -1,
-    //   description: 'Penurunan nilai sementara akibat fluktuasi pasar.',
-    //   type: 'decrease'
-    // },
-    // {
-    //   date: new Date(2025, 5, 22).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-    //   value: data.targetPay * 1.05,
-    //   change: 1,
-    //   description: 'Nilai kembali stabil setelah penyesuaian pasar.',
-    //   type: 'increase'
-    // },
   ];
   // --- END DUMMY DATA ---
 
@@ -110,10 +82,33 @@ const Member = ({ data, getPatunganDatabase }) => {
             Rp {dummyStockOverviewData.currentValuePerLot.toLocaleString('id-ID')}
           </p>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg flex flex-col justify-between">
-          <p className="text-sm text-green-700 font-medium">Kenaikan</p>
-          <p className="text-xl font-bold text-green-800 mt-1">
-            +{dummyStockOverviewData.growthPercentage}%
+        <div
+          className={`p-4 rounded-lg flex flex-col justify-between ${dummyStockOverviewData.growthPercentage < 0
+              ? 'bg-red-50' // Red background if negative
+              : dummyStockOverviewData.growthPercentage === 0
+                ? 'bg-blue-50' // Blue background if zero
+                : 'bg-green-50' // Green background if positive
+            }`}
+        >
+          <p
+            className={`text-sm font-medium ${dummyStockOverviewData.growthPercentage < 0
+                ? 'text-red-700' // Red text if negative
+                : dummyStockOverviewData.growthPercentage === 0
+                  ? 'text-blue-700' // Blue text if zero
+                  : 'text-green-700' // Green text if positive
+              }`}
+          >
+            Pergerakan Saham
+          </p>
+          <p
+            className={`text-xl font-bold mt-1 ${dummyStockOverviewData.growthPercentage < 0
+                ? 'text-red-800' // Darker red text if negative
+                : dummyStockOverviewData.growthPercentage === 0
+                  ? 'text-blue-800' // Darker blue text if zero
+                  : 'text-green-800' // Darker green text if positive
+              }`}
+          >
+            {dummyStockOverviewData.growthPercentage > 0 ? "+" + dummyStockOverviewData.growthPercentage : dummyStockOverviewData.growthPercentage}%
           </p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg sm:col-span-2">
@@ -125,7 +120,7 @@ const Member = ({ data, getPatunganDatabase }) => {
         </div>
       </div>
 
-      {/* List Perkembangan Proses Saham */}
+      {/* List Perkembangan Proses Saham
       <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
         <History className="w-6 h-6 mr-3 text-purple-600" /> Riwayat Perkembangan Nilai Saham
       </h2>
@@ -160,7 +155,7 @@ const Member = ({ data, getPatunganDatabase }) => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
 
       {/* Member List Section */}
       <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">

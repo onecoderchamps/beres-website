@@ -193,7 +193,7 @@ const Member = ({ data, getArisanDatabase }) => {
       )}
 
       {/* Perkembangan Riwayat Emas Section */}
-      <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
+      {/* <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
         <History className="w-6 h-6 mr-3 text-yellow-600" /> Perkembangan Riwayat Emas
       </h2>
       {dummyGoldHistory.length === 0 ? (
@@ -253,11 +253,11 @@ const Member = ({ data, getArisanDatabase }) => {
           <p className="text-sm text-gray-500 italic text-center pt-4">
             *Data riwayat emas adalah harga umum pasar dan dapat bervariasi dari sumber yang berbeda.
           </p>
-        </div>
-      )}
+        </div> */}
+      {/* )} */}
 
       {/* --- SECTION: Riwayat Penerima Arisan (Dengan Foto Profil Dapat Diklik) --- */}
-      <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
+      {/* <h2 className="font-bold text-2xl text-gray-800 mb-5 border-b pb-3 border-gray-100 flex items-center">
         <Gift className="w-6 h-6 mr-3 text-indigo-600" /> Riwayat Penerima Arisan
       </h2>
       {dummyRecipientHistory.length === 0 ? (
@@ -289,7 +289,7 @@ const Member = ({ data, getArisanDatabase }) => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
       {/* --- END SECTION --- */}
 
 
