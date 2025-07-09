@@ -139,19 +139,6 @@ function HomeScreen() {
             </div>
           ) : null
         ))}
-        {data.length > 3 && (
-          <div className="flex-none w-24 flex items-center justify-center p-2">
-            <button
-              onClick={() => navigate(navigatePath === '/PatunganDetail' ? '/AllPatungan' : '/AllArisan')}
-              className="flex items-center justify-center flex-col h-full w-full bg-gray-100 text-gray-700 rounded-xl shadow-sm hover:bg-gray-200 transition-colors duration-200 text-sm font-medium"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mb-1">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              Lihat Semua
-            </button>
-          </div>
-        )}
       </div>
     );
   };

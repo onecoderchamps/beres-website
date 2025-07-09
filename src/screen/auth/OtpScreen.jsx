@@ -120,7 +120,7 @@ const OtpVerificationScreen = () => {
           Kode Verifikasi
         </h1>
         <p className="text-center text-gray-500 mb-8 text-sm md:text-base">
-          Masukkan 6 digit kode yang kami kirim ke WhatsApp <br/>
+          Masukkan 4 digit kode yang kami kirim ke WhatsApp <br/>
           <span className="font-semibold text-gray-700">{phonenumber}</span>
         </p>
 
@@ -130,8 +130,8 @@ const OtpVerificationScreen = () => {
           <input
             type="tel" // Gunakan 'tel' untuk keyboard numerik di mobile
             id="otpInput"
-            placeholder="— — — — — —" // Placeholder yang lebih baik
-            maxLength="6"
+            placeholder="— — — —" // Placeholder yang lebih baik
+            maxLength="4"
             className={`w-full px-4 py-3 text-center border ${
               error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-yellow-500'
             } rounded-xl text-2xl font-bold tracking-widest text-gray-800 placeholder-gray-400 outline-none focus:ring-2 focus:border-transparent transition duration-200 ease-in-out appearance-none`}
