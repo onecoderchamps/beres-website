@@ -5,7 +5,6 @@ import BackButton from '../../component/BackButton';
 const KoperasiScreen = () => {
     const [loading, setLoading] = useState(true);
     const [saldo, setSaldo] = useState(300000);
-    const [totalIuran, setTotalIuran] = useState(900000);
     const [modalVisible, setModalVisible] = useState(false);
     const [nominal, setNominal] = useState('');
     const [keterangan, setKeterangan] = useState('');
@@ -16,6 +15,7 @@ const KoperasiScreen = () => {
         try {
             const rekeningRes = await getData('rekening/SettingIuranBulanan');
             const transaksi = await getData('transaksi');
+            
             setHistory(transaksi.data.filter(item => item.type.includes('KoperasiBulanan')));
             setRekening(rekeningRes.data);
             setLoading(false);
@@ -42,7 +42,6 @@ const KoperasiScreen = () => {
         }
 
         setSaldo(prev => prev - amount);
-        setTotalIuran(prev => prev + amount);
         setHistory(prev => [
             {
                 id: Date.now().toString(),
