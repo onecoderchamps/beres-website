@@ -59,6 +59,11 @@ export default function PatunganDetail() {
 
     // Handles joining the Patungan (buying asset)
     const handleJoin = async () => {
+        if(!userData.isPayMonthly)
+        {
+            alert('Anda belum membayar iuran bulanan koperasi.');
+            return;
+        }
         if (!userData || !userData.phone) {
             alert('Data pengguna tidak lengkap. Harap coba lagi.');
             return;

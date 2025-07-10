@@ -22,7 +22,7 @@ const categories = [
   { key: 'Koperasi', label: 'Koperasi', icon: FaHandshake, color: 'text-red-600' },
   { key: 'PPOB', label: 'PPOB', icon: FaMobileAlt, color: 'text-orange-600' },
   { key: 'MyAsset', label: 'AssetKu', icon: FaChartPie, color: 'text-teal-600' },
-  { key: 'MyProfile', label: 'Profile', icon: FaUserCircle, color: 'text-indigo-600' },
+  // { key: 'MyProfile', label: 'Profile', icon: FaUserCircle, color: 'text-indigo-600' },
 ];
 
 const CategorySelector = () => {
@@ -107,7 +107,7 @@ const CategorySelector = () => {
       {/* Category Grid */}
       <div
         className={`grid grid-cols-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 p-4 transition-all duration-300 
-        ${!loadingProfile && !dataProfile?.isMember ? 'filter blur-sm pointer-events-none' : ''}`}
+        ${!loadingProfile && !dataProfile?.isMember ? 'filter backdrop-blur-3xl pointer-events-none' : ''}`}
       >
         {categories.map(({ key, label, icon: Icon, color }) => (
           <button

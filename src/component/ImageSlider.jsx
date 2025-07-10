@@ -1,8 +1,11 @@
   import React, { useEffect, useState } from 'react';
   import { HiOutlineBell } from 'react-icons/hi'; // Contoh ikon notifikasi
   import { getData } from '../api/service';
+import { FaUserCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
   const WelcomeHeader = ({ userName }) => {
+     const navigate = useNavigate();
     // Anda bisa menambahkan logika untuk icon notifikasi di sini,
     // misalnya jumlah notifikasi yang belum dibaca
     const hasNotifications = false; // Contoh: ganti dengan logika Anda
@@ -28,8 +31,8 @@
             Hai, {data.fullName}
           </h1>
         </div>
-        <div className="relative">
-          {/* <HiOutlineBell className="w-7 h-7 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors duration-200" /> */}
+        <div className="relative" onClick={() => navigate('/AkunPage')}>
+          <FaUserCircle className="w-7 h-7 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors duration-200" />
           {hasNotifications && (
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>

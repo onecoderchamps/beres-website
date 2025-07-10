@@ -61,6 +61,11 @@ export default function ArisanDetail() {
 
     // Handles joining the Arisan
     const handleJoin = async () => {
+        if(!userData.isPayMonthly)
+        {
+            alert('Anda belum membayar iuran bulanan koperasi.');
+            return;
+        }
         if (!userData || !userData.phone) {
             alert('Data pengguna tidak lengkap. Harap coba lagi.');
             return;
