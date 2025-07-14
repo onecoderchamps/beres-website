@@ -114,12 +114,12 @@ const ChatScreen = () => {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Header */}
-      <div className="bg-white shadow-md py-3 px-4 z-10">
+      <div className="bg-white py-3 z-10">
         <BackButton title="Beres AI" />
       </div>
 
       {/* Chat Messages Area - Will take remaining height and be scrollable */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
         {initialLoading ? (
           <div className="text-center mt-10 text-gray-500 flex items-center justify-center">
             <FaSpinner className="animate-spin mr-2" /> Memuat chat...
@@ -128,7 +128,7 @@ const ChatScreen = () => {
           <>
             {chats.length === 0 && (
               <div className="text-center text-gray-500 mt-20">
-                Belum ada pesan. Mulai percakapan Anda dengan BeresAI
+                Mulai percakapan Anda dengan Beres AI
               </div>
             )}
             {chats.map((chat) => (
