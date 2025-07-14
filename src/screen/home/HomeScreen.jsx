@@ -8,6 +8,7 @@ import PatunganCard from '../../component/PatunganView'; // Will ensure this is 
 import ArisanComponent from '../../component/ArisanView'; // Will ensure this is mobile-friendly
 // import AppHeader from '../../component/Header'; // AppHeader is not used in the render, can be removed if not needed elsewhere
 import EventList from '../../component/EventList';
+import { FaWhatsapp } from 'react-icons/fa';
 
 function HomeScreen() {
   const navigate = useNavigate();
@@ -104,6 +105,10 @@ function HomeScreen() {
     fetchActiveOrderSaldo(); // Fetch active order saldo on component mount
   }, [checkAuth, getDatabasePatungan, getDatabaseArisan, fetchEvents, fetchActiveOrderSaldo]);
 
+  const openWhatsApp = () => {
+    window.location.href = `ChatScreen`;
+  };
+
   const renderContent = (data, loading, error, Component, navigatePath) => {
     if (loading) {
       return (
@@ -196,6 +201,13 @@ function HomeScreen() {
           </p>
         </div>
       )}
+      <button
+        onClick={openWhatsApp}
+        className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full flex items-center shadow-lg transform hover:scale-105 transition-transform duration-300 z-40"
+      >
+        <FaWhatsapp className="text-xl mr-2" />
+        CS
+      </button>
     </div>
   );
 }

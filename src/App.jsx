@@ -1,5 +1,5 @@
 // src/App.js
-import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import HomeScreen from "./screen/home/HomeScreen";
 import LoginScreen from "./screen/auth/LoginScreen";
 import OtpVerificationScreen from "./screen/auth/OtpScreen";
@@ -17,6 +17,7 @@ import AkunPage from "./screen/home/MyProfileScreen";
 import EdukasiScreen from "./screen/home/EdukasiScreen";
 import PPOBScreen from "./screen/ppob/PpobScreen";
 import MaintenancePage from "./screen/Maintenance";
+import ChatScreen from "./screen/chat/ChatScreen";
 
 
 function App() {
@@ -40,6 +41,8 @@ function App() {
         <Route path="/ArisanDetail/:id" element={<ArisanDetail />} />
         <Route path="/SedekahScreen" element={<SedekahScreen />} />
         <Route path="/PPOBScreen" element={<PPOBScreen />} />
+        <Route path="/ChatScreen" element={<ChatScreen />} />
+
         {/* --- Rute Catch-All untuk Mengalihkan Jika Tidak Ada Yang Cocok --- */}
         {/* Ini harus menjadi Route terakhir di dalam <Routes> */}
         {/* <Route path="*" element={<MaintenancePage />} /> */}
