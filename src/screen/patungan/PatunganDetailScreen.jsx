@@ -5,7 +5,7 @@ import Deskripsi from './component/Deskripsi';
 import Member from './component/Member';
 import Syarat from './component/Syarat';
 import BackButton from '../../component/BackButton';
-import { FaSpinner, FaShoppingCart, FaCreditCard, FaTimes } from 'react-icons/fa'; // Added icons for design
+import { FaSpinner, FaShoppingCart, FaCreditCard, FaTimes, FaPlus } from 'react-icons/fa'; // Added icons for design
 
 export default function PatunganDetail() {
     const { id } = useParams();
@@ -170,7 +170,6 @@ export default function PatunganDetail() {
             </div>
 
             {/* Floating Action Button (FAB) - Beli Asset */}
-            {detailData?.statusMember?.isMembership === false && (
                 <button
                     onClick={() => {
                         setModalVisible(true);
@@ -182,10 +181,11 @@ export default function PatunganDetail() {
                                transform hover:scale-105 active:scale-95"
                     aria-label="Beli Asset"
                 >
-                    <FaShoppingCart className="mr-2 text-xl" />
+                    <FaPlus className="mr-2 text-xl" />
                     <span>Beli Asset</span>
                 </button>
-            )}
+            {/* {detailData?.statusMember?.isMembership === false && (
+            )} */}
 
             {/* Floating Action Button (FAB) - Bayar Iuran (Example, assuming conditions for this) */}
             {/* You'd need to add conditions here for when this button should appear, e.g.,
