@@ -67,7 +67,7 @@ const Member = ({ data, getPatunganDatabase }) => {
   // --- END DUMMY DATA ---
 
   // Ensure data.memberPatungan is an array before mapping
-  const members = Array.isArray(data.memberPatungan) ? data.memberPatungan : [];
+  const members = Array.isArray(data.memberPatungan) ? data.memberPatungan.sort((a, b) => a.name.localeCompare(b.name)) : [];
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-6">

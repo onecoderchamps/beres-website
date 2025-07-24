@@ -54,15 +54,17 @@ const PatunganScreen = () => {
           {/* Patungan Grid */}
           {patunganData.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"> {/* Responsive grid */}
-              {patunganData.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="cursor-pointer transform hover:scale-[1.03] transition-transform duration-200 ease-in-out" 
-                  onClick={() => navigate('/PatunganDetail/' + item.id, { state: { data: item } })}
-                >
-                  <PatunganComponent data={item} />
-                </div>
-              ))}
+              {patunganData.map((item) =>
+                item.sisaSlot > 0 && (
+                  <div 
+                    key={item.id} 
+                    className="cursor-pointer transform hover:scale-[1.03] transition-transform duration-200 ease-in-out" 
+                    onClick={() => navigate('/PatunganDetail/' + item.id, { state: { data: item } })}
+                  >
+                    <PatunganComponent data={item} />
+                  </div>
+                )
+              )}
             </div>
           ) : (
             <div className="text-center py-20">
