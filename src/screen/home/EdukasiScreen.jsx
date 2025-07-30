@@ -71,9 +71,9 @@ STRATEGI MUSTIKA ESTATE
         id: '2',
         title: 'Investasi Rumah Tanpa Modal',
         type: 'video',
-        thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg', // Contoh thumbnail YouTube
+        thumbnail: 'https://img.youtube.com/vi/75LvJLlCJnY?si=XBkUmc-t7okgSYsU/hqdefault.jpg', // Contoh thumbnail YouTube
         sourceBy: 'By Kasisolusi',
-        source: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=57s', // Contoh URL YouTube
+        source: 'https://youtu.be/75LvJLlCJnY?si=XBkUmc-t7okgSYsU', // Contoh URL YouTube
     },
     {
         id: '3',
