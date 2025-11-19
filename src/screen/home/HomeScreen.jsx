@@ -177,10 +177,10 @@ function HomeScreen() {
       </div>
 
       {/* Promo Arisan Section */}
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <h2 className="text-xl font-bold text-gray-800 px-4 mb-4">Promo Arisan</h2>
         {renderContent(arisanData, loadingArisan, errorArisan, ArisanComponent, '/ArisanDetail')}
-      </div>
+      </div> */}
 
       {/* Footer Branding */}
       <div className="mt-12 text-center text-xs text-gray-400">

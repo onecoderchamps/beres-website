@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "app-beres",
     "public": "dist",
     "ignore": [
       "firebase.json",

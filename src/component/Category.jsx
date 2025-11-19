@@ -17,10 +17,10 @@ import { BiDonateHeart } from "react-icons/bi";
 const categories = [
   { key: 'Edukasi', label: 'Edukasi', icon: FaGraduationCap, color: 'text-blue-600' },
   { key: 'Patungan', label: 'Patungan', icon: MdStore, color: 'text-green-600' },
-  { key: 'Arisan', label: 'Arisan', icon: AiFillGold, color: 'text-yellow-600' },
+  // { key: 'Arisan', label: 'Arisan', icon: AiFillGold, color: 'text-yellow-600' },
   { key: 'Sedekah', label: 'Sedekah', icon: BiDonateHeart, color: 'text-purple-600' },
   { key: 'Koperasi', label: 'Koperasi', icon: FaHandshake, color: 'text-red-600' },
-  { key: 'PPOB', label: 'PPOB', icon: FaMobileAlt, color: 'text-orange-600' },
+  // { key: 'PPOB', label: 'PPOB', icon: FaMobileAlt, color: 'text-orange-600' },
   { key: 'MyAsset', label: 'AssetKu', icon: FaChartPie, color: 'text-teal-600' },
   // { key: 'MyProfile', label: 'Profile', icon: FaUserCircle, color: 'text-indigo-600' },
 ];

@@ -18,6 +18,7 @@ import EdukasiScreen from "./screen/home/EdukasiScreen";
 import PPOBScreen from "./screen/ppob/PpobScreen";
 import MaintenancePage from "./screen/Maintenance";
 import ChatScreen from "./screen/chat/ChatScreen";
+import TermsPage from "./screen/Privacy";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomeSelector />} />
+        <Route path="/Privacy" element={<TermsPage />} />
         <Route path="/HomeScreen" element={<HomeScreen />} />
         <Route path="/AktifitasPage" element={<AktifitasPage />} />
         <Route path="/AkunPage" element={<AkunPage />} />
